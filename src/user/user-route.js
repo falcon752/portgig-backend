@@ -16,18 +16,31 @@ const GOOGLE_OAUTH_SCOPES = [
 
 const redirectUrl = process.env.CLIENT_HOME_URL;
 
-router.post("/auth/google", (req, res) => {
-  console.log(GOOGLE_CALLBACK_URL, GOOGLE_CLIENT_ID, GOOGLE_OAUTH_URL);
-  const role = req.query.role || "Creator";
-  const state = JSON.stringify({ role });
-  const scopes = GOOGLE_OAUTH_SCOPES.join(" ");
-  const GOOGLE_OAUTH_CONSENT_SCREEN_URL = `${GOOGLE_OAUTH_URL}?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${GOOGLE_CALLBACK_URL}&access_type=offline&response_type=code&state=${encodeURIComponent(
-    state
-  )}&scope=${scopes}`;
-  console.log(GOOGLE_OAUTH_CONSENT_SCREEN_URL);
-  res.redirect(GOOGLE_OAUTH_CONSENT_SCREEN_URL);
-});
+const startGoogleAuth = (req, res) => {
+  const role = (req.query.role || req.body?.role || "Creator");
+  const params = new URLSearchParams({
+    client_id: process.env.GOOGLE_CLIENT_ID,
+    redirect_uri: process.env.GOOGLE_CALLBACK_URL,           // EXACT match in Google console
+    access_type: 'offline',
+    response_type: 'code',
+    state: JSON.stringify({ role }),
+    scope: (process.env.GOOGLE_OAUTH_SCOPES || [
+      'https://www.googleapis.com/auth/userinfo.email',
+      'https://www.googleapis.com/auth/userinfo.profile'
+    ]).toString().includes('http')
+      ? ['https://www.googleapis.com/auth/userinfo.email','https://www.googleapis.com/auth/userinfo.profile'].join(' ')
+      : process.env.GOOGLE_OAUTH_SCOPES,
+    prompt: 'consent' // ensures refresh_token on repeat grants
+  });
 
+  const authBase = process.env.GOOGLE_OAUTH_URL || 'https://accounts.google.com/o/oauth2/v2/auth';
+  const url = `${authBase}?${params.toString()}`;
+  console.log('Google auth URL:', url);
+  return res.redirect(url);
+};
+
+router.get('/auth/google', startGoogleAuth);
+router.post('/auth/google', startGoogleAuth);
 router.get("/auth/google/callback", async (req, res) => {
   try {
     const data = await userService.googleLogin(req);

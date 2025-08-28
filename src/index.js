@@ -89,7 +89,7 @@ io.on("connection", (socket) => {
 // In src/index.js
 app.use("/uploads", express.static(path.join(__dirname, "..", "uploads")));
 // Express middleware configuration
-app.set("trust proxy", ["100.20.92.101", "44.225.181.72", "44.227.217.144"]);
+app.set('trust proxy', 1);
 app.use(
   cors({
     origin: "*",
