@@ -1,0 +1,12 @@
+
+# dependencies
+/node_modules
+
+/app.log
+app.log
+.log
+.env.local
+.env
+.idea
+.vs
+.vscode

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>WhatsApp-like Chat</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="chat.js"></script>
+</head>
+
+<body>
+    <div id="chat-container">
+        <div id="contacts-list"></div>
+        <div id="chat-window">
+            <div id="message-container"></div>
+            <div id="input-area">
+                <input type="text" id="message-input">
+                <button id="send-button">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const userId = 'user123';
+        const chat = new ChatClient(userId);
+
+        document.getElementById('send-button').addEventListener('click', () => {
+            const input = document.getElementById('message-input');
+            const message = input.value;
+            const recipient = 'user456'; // Get from UI selection
+            if (message && recipient) {
+                chat.sendMessage(recipient, message);
+                input.value = '';
+            }
+        });
+    </script>
+</body>
+
+</html>
