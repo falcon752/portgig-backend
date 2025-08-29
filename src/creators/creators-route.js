@@ -129,7 +129,7 @@ router.post(
   "/upload-portfolio-files",
   upload.array("files", 20),
   async (req, res) => {
-    const BASE_URL = process.env.BASE_URL || "http://127.0.0.1:5008";
+    const BASE_URL = process.env.BASE_URL || "https://api.portgig.com";
     try {
       const fileUrls = req.files.map((file) =>
         `${BASE_URL}/uploads/portfolio/${file.filename}`.replace(/\\/g, "/")
