@@ -490,6 +490,7 @@ exports.registerationValidationSchema = yup.object({
       "Password must contain at least one special character"
     )
     .required(),
+  phone_number: yup.string().trim().label("Phone Number").optional  (),
 });
 
 exports.recruiterRegisterationValidationSchema = yup.object({

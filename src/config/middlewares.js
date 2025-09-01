@@ -12,6 +12,7 @@ function auth(options) {
   const { allowRoutes = [] } = options || {};
   return function (req, res, next) {
     console.log(req.path, "Path");
+    console.log(allowRoutes.includes(req.path))
     if (allowRoutes.includes(req.path)) {
       next();
     } else {

@@ -59,6 +59,7 @@ exports.register = async function register(payload) {
       field,
       lga,
       years_of_experience,
+      phone_number,
     } = registerationValidationSchema.validateSync(payload);
 
     if (await CreatorModel.exists({ "auth.email": email })) {
@@ -79,6 +80,7 @@ exports.register = async function register(payload) {
         industry,
         field,
         years_of_experience,
+        phone_number,
       },
     });
 
@@ -1070,9 +1072,7 @@ exports.getCreatorByIdAgg = async function getCreatorByIdAgg(creatorId) {
     }
 
     // Basic auth guard: Check if creator exists
-    const creator = await CreatorModel.findById(creatorId)
-      .select("_id")
-      .lean();
+    const creator = await CreatorModel.findById(creatorId).select("_id").lean();
     if (!creator) {
       throw new UnAuthorizedError(ErrorMessageEnum.UNAUTHORIZED);
     }
@@ -1192,7 +1192,10 @@ exports.getCreatorByIdAgg = async function getCreatorByIdAgg(creatorId) {
                         $arrayElemAt: [
                           "$rating_recruiters",
                           {
-                            $indexOfArray: ["$rating_recruiters._id", "$$r.user"],
+                            $indexOfArray: [
+                              "$rating_recruiters._id",
+                              "$$r.user",
+                            ],
                           },
                         ],
                       },
@@ -1200,10 +1203,7 @@ exports.getCreatorByIdAgg = async function getCreatorByIdAgg(creatorId) {
                     in: {
                       user_id: { $ifNull: ["$$matched._id", null] },
                       username: {
-                        $ifNull: [
-                          "$$matched.bio_data.full_name",
-                          "Unknown",
-                        ],
+                        $ifNull: ["$$matched.bio_data.full_name", "Unknown"],
                       },
                     },
                   },

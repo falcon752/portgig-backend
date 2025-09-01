@@ -118,7 +118,8 @@ router.get("/refresh-access-token", loginLimiter, async (req, res) => {
 
 router.get("/profile", async (req, res) => {
   try {
-    const data = await creatorService.getCreatorByIdAgg(req.userId);
+    const creatorId = req.query.creatorId;
+    const data = await creatorService.getCreatorByIdAgg(creatorId);
     res.json(data);
   } catch (error) {
     res.status(error.status).json(error.toObject());

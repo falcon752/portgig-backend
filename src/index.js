@@ -126,6 +126,7 @@ app.use(
       "/api/v1/creator/reset-password",
       "/api/v1/creator/profile-views/",
       "/api/v1/creator/social-clicks/",
+      "/api/v1/creator/profile",
       "/api/v1/recruiter/login",
       "/api/v1/recruiter/bio-login",
       "/api/v1/recruiter/register",
