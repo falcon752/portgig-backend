@@ -727,7 +727,7 @@ exports.updateProfileBySection = async function updateProfileBySection(
 
 exports.incrementProfileViews = async function (queryParams = {}) {
   try {
-    const { userId, viewerId, recipientRole = "recruiters" } = queryParams;
+    const { userId, viewerId, recipientRole = "recruiter" } = queryParams;
     // Validate userId and viewerId
     yupObjectId().required().validateSync(userId);
     yupObjectId().required().validateSync(viewerId);
@@ -767,7 +767,7 @@ exports.incrementProfileViews = async function (queryParams = {}) {
         $push: {
           "profile_views.view_history": {
             view_by: viewerId,
-            recipient_role: recipientRole,
+            recipient_role: `${recipientRole}s`,
             viewed_at: new Date(),
           },
         },
