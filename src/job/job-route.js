@@ -42,7 +42,7 @@ router.delete("/remove", async (req, res) => {
 
 router.put("/apply", async (req, res) => {
   try {
-    const data = await jobService.applyJob(req.userId, req.query);
+    const data = await jobService.applyJob(req.userId, req.query, req.body);
     res.json(data);
   } catch (error) {
     res.status(error.status || 500).json(error.toObject());

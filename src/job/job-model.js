@@ -35,6 +35,8 @@ const JobSchema = new Schema(
           type: Number,
           default: 0,
         },
+        cover_letter: { type: String },
+        resume: { type: String },
       },
     ],
     title: { type: String, required: true, trim: true },

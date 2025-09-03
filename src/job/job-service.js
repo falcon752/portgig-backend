@@ -168,6 +168,8 @@ exports.getJobs = async function getJobs(userId, queryParams) {
                 in: {
                   id: "$$applicant.creator_id",
                   status: "$$applicant.status",
+                  cover_letter: "$$applicant.cover_letter",
+                  // resume: "$$applicant.resume",
                   views: "$$applicant.views",
                   user_name: {
                     $arrayElemAt: [
@@ -438,8 +440,9 @@ exports.removejob = async function removeJob(userId, query) {
   }
 };
 
-exports.applyJob = async function applyJob(userId, query) {
+exports.applyJob = async function applyJob(userId, query, payload) {
   try {
+    const { cover_letter } = payload;
     const { job_id } = query;
     yupObjectId().required().validateSync(userId);
 
@@ -454,7 +457,12 @@ exports.applyJob = async function applyJob(userId, query) {
       },
       {
         $addToSet: {
-          applicants: { creator_id: userId, status: ApplicantStatus.PENDING },
+          applicants: {
+            creator_id: userId,
+            status: ApplicantStatus.PENDING,
+            cover_letter: cover_letter,
+            // resume: resume,
+          },
         },
       },
       {

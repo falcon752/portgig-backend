@@ -751,6 +751,7 @@ exports.getRecruiterDashboard = async function getRecruiterDashboard(userId) {
           title: 1,
           applicant_status: "$applicants.status",
           applicant_id: "$applicants.creator_id",
+          cover_letter: "$applicants.cover_letter",
           application_date: "$applicants.application_date", // Use applicants.application_date
           applicant_info: {
             $arrayElemAt: [
@@ -788,6 +789,7 @@ exports.getRecruiterDashboard = async function getRecruiterDashboard(userId) {
                     social_clicks: "$applicant_info.social_clicks",
                   },
                   application_date: "$application_date",
+                  cover_letter: "$cover_letter",
                 },
                 else: "$$REMOVE",
               },
@@ -809,6 +811,7 @@ exports.getRecruiterDashboard = async function getRecruiterDashboard(userId) {
                     social_clicks: "$applicant_info.social_clicks",
                   },
                   application_date: "$application_date",
+                  cover_letter: "$cover_letter",
                 },
                 else: "$$REMOVE",
               },
@@ -832,6 +835,7 @@ exports.getRecruiterDashboard = async function getRecruiterDashboard(userId) {
                     social_clicks: "$applicant_info.social_clicks",
                   },
                   application_date: "$application_date",
+                  cover_letter: "$cover_letter",
                 },
                 else: "$$REMOVE",
               },
@@ -850,11 +854,13 @@ exports.getRecruiterDashboard = async function getRecruiterDashboard(userId) {
                 social_clicks: "$applicant_info.social_clicks",
               },
               application_date: "$application_date",
+              cover_letter: "$cover_letter",
             },
           },
           latest_application: {
             $max: {
               application_date: "$application_date",
+              cover_letter: "$cover_letter",
               job_title: "$title",
               applicant_info: {
                 bio_data: "$applicant_info.bio_data",
@@ -918,6 +924,7 @@ exports.getRecruiterDashboard = async function getRecruiterDashboard(userId) {
                     "$latest_application.applicant_info.social_clicks",
                 },
                 application_date: "$latest_application.application_date",
+                cover_letter: "$latest_application.cover_letter",
               },
             },
           },
