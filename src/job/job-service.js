@@ -41,7 +41,7 @@ exports.createJob = async function createJob(userId, payload) {
       // responsibilities,
       // requirements,
       // others,
-      // experience,
+      experience,
       // industry,
     } = jobCreateValidationSchema.validateSync(payload);
     yupObjectId().required().validateSync(userId);
@@ -64,7 +64,7 @@ exports.createJob = async function createJob(userId, payload) {
         // others,
       },
       recruiter_id: userId,
-      // experience: experience.toLowerCase(),
+      experience: experience.toLowerCase(),
       // industry: industry.toLowerCase(),
     });
 

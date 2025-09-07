@@ -519,7 +519,7 @@ exports.recruiterRegisterationValidationSchema = yup.object({
 exports.jobCreateValidationSchema = yup.object({
   title: yup.string().trim().label("Title").required(),
   description: yup.string().trim().label("Description").required(),
-  // experience: yup.string().trim().label("Experience").required(),
+  experience: yup.string().trim().label("Experience").required(),
   // industry: yup.string().trim().label("Industry").required(),
   salary_range: yup
     .string()

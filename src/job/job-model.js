@@ -41,7 +41,7 @@ const JobSchema = new Schema(
     ],
     title: { type: String, required: true, trim: true },
     description: { type: String, required: true, trim: true },
-    // experience: { type: String, required: true, trim: true },
+    experience: { type: String, trim: true },
     // industry: { type: String, required: true, trim: true },
     salary_range: {
       type: String,
