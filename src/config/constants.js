@@ -8,7 +8,20 @@ exports.CollectionEnum = {
   RECRUITER: "Recruiter",
   JOB: "Job",
   WAITLIST: "Waitlist",
+  NOTIFICATION: "Notification",
 };
+
+exports.NotificationTypeEnum = {
+  INFO: "INFO",
+  ALERT: "ALERT",
+  WARNING: "WARNING",
+  JOB_APPLICATION: "JOB_APPLICATION",
+  JOB_STATUS_UPDATE: "JOB_STATUS_UPDATE",
+  NEW_JOB_POSTED: "NEW_JOB_POSTED",
+  GENERAL: "GENERAL",
+  JOB_CLOSED: "JOB_CLOSED",
+};
+
 exports.ProviderEnum = {
   GOOGLE: "GOOGLE",
   EMAIL: "EMAIL",
@@ -184,6 +197,7 @@ exports.MailTypeEnum = {
   HOST_INVITATION: "HOST_INVITATION",
   SEND_TO_WAITLIST: "SEND_TO_WAITLIST",
   NEWSLETTER: "NEWSLETTER",
+  DISQUALIFIED_CREATOR: "DISQUALIFIED_CREATOR",
 };
 
 exports.RecipientTypeEnum = {

@@ -15,7 +15,7 @@ router.post("/create", async (req, res) => {
 
 router.patch("/close", async (req, res) => {
   try {
-    const data = await jobService.closeJob(req.userId, req.query);
+    const data = await jobService.closeJob(req.userId, req.query,req.body);
     res.json(data);
   } catch (error) {
     res.status(error.status || 500).json(error.toObject());

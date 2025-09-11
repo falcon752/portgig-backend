@@ -8,9 +8,10 @@ const mongoose = require("mongoose");
 const {
   yupObjectId,
   jobCreateValidationSchema,
+  validateCloseJobContent,
 } = require("../config/validation-schemas");
 
-// const mail = require("../config/email");
+const mail = require("../config/email");
 
 // const {} = require("../config/constants");
 
@@ -25,7 +26,14 @@ const {
   InvalidPayloadError,
   InternalServerError,
 } = require("../config/errors");
-const { JobAvailability, ApplicantStatus } = require("../config/constants");
+const {
+  JobAvailability,
+  ApplicantStatus,
+  MailTypeEnum,
+  CollectionEnum,
+  NotificationTypeEnum,
+} = require("../config/constants");
+const { NotificationModel } = require("../notification/notification-model");
 
 exports.createJob = async function createJob(userId, payload) {
   try {
@@ -78,10 +86,12 @@ exports.createJob = async function createJob(userId, payload) {
     handleError(error);
   }
 };
-exports.closeJob = async function closeJob(userId, query) {
+
+exports.closeJob = async function closeJob(userId, query, payload) {
   try {
     const { job_id } = query;
     yupObjectId().required().validateSync(userId);
+    const { reason } = validateCloseJobContent.validateSync(payload);
 
     const recruiter = await RecruiterModel.findById(userId);
     if (!recruiter) throw new InvalidPayloadError("recruiter not found");
@@ -92,6 +102,68 @@ exports.closeJob = async function closeJob(userId, query) {
       { new: true }
     );
     if (!job) throw new InvalidPayloadError("job not found");
+
+    const disqualifiedApplicants = job.applicants.filter(
+      (applicant) => applicant.status === ApplicantStatus.NOT_QUALIFIED
+    );
+
+    const emailsPromises = [];
+    const notificationPromises = [];
+
+    for (const applicant of disqualifiedApplicants) {
+      const creator = await CreatorModel.findById(applicant.creator_id);
+      if (creator && creator.auth && creator.auth.email) {
+        const emailContent = `Dear ${
+          creator.bio_data.full_name || "Creator"
+        },Thank you for applying for the ${
+          job.title
+        } position. After careful consideration, we have decided to move forward with other candidates for this role.\n Reason: ${reason}`;
+
+        emailsPromises.push({
+          email: creator.auth.email,
+          subject: `Update on Your Application for ${job.title}`,
+          content: emailContent,
+        });
+
+        notificationPromises.push({
+          from: CollectionEnum.RECRUITER,
+          recipient: creator._id,
+          recipient_role: CollectionEnum.CREATOR,
+          description: `Your application for the ${job.title} position has been closed. Reason: ${reason}`,
+          notification_type: NotificationTypeEnum.JOB_CLOSED,
+        });
+
+        // await Promise.all([
+        //   mail(MailTypeEnum.DISQUALIFIED_CREATOR, {
+        //     email: creator.auth.email,
+        //     subject: `Update on Your Application for ${job.title}`,
+        //     content: emailContent,
+        //   }),
+        //   NotificationModel.create({
+        //     from: CollectionEnum.RECRUITER,
+        //     recipient: creator._id,
+        //     recipient_role: CollectionEnum.CREATOR,
+        //     description: `Your application for the ${job.title} position has been disqualified. Reason: ${content}`,
+        //     notification_type: NotificationTypeEnum.JOB_CLOSED,
+        //   }),
+        // ]);
+      }
+    }
+
+    notificationPromises.push({
+      from: CollectionEnum.RECRUITER,
+      recipient: job.recruiter_id,
+      recipient_role: CollectionEnum.RECRUITER,
+      description: `You have successfully closed the job posting for ${job.title}.`,
+      notification_type: NotificationTypeEnum.JOB_CLOSED,
+    });
+
+    await Promise.all([
+      ...emailsPromises.map((email) =>
+        mail(MailTypeEnum.DISQUALIFIED_CREATOR, email)
+      ),
+      NotificationModel.insertMany(notificationPromises),
+    ]);
 
     return {
       status: 200,
@@ -481,6 +553,13 @@ exports.applyJob = async function applyJob(userId, query, payload) {
       }
       throw new InvalidPayloadError("Job not found or not active");
     }
+    await NotificationModel.create({
+      from: CollectionEnum.CREATOR,
+      recipient: job.recruiter_id,
+      recipient_role: CollectionEnum.RECRUITER,
+      description: `${creator.bio_data.full_name} has applied for the ${job.title} position.`,
+      notification_type: NotificationTypeEnum.JOB_APPLICATION,
+    });
     return {
       status: 200,
       message: "Job applied successfully",
@@ -544,6 +623,21 @@ exports.updateApplicantStatus = async function updateApplicantStatus(
 
     if (!updatedJob)
       throw new InternalServerError("Failed to update applicant status");
+
+    if (
+      status === ApplicantStatus.SHORTLISTED ||
+      status === ApplicantStatus.SELECTED
+    ) {
+      await NotificationModel.create({
+        from: CollectionEnum.RECRUITER,
+        recipient: creator_id,
+        recipient_role: CollectionEnum.CREATOR,
+        description: `You have been ${status.toLowerCase()} for this ${
+          updatedJob?.title
+        }.`,
+        notification_type: NotificationTypeEnum.JOB_STATUS_UPDATE,
+      });
+    }
 
     return {
       status: 200,

@@ -490,7 +490,7 @@ exports.registerationValidationSchema = yup.object({
       "Password must contain at least one special character"
     )
     .required(),
-  phone_number: yup.string().trim().label("Phone Number").optional  (),
+  phone_number: yup.string().trim().label("Phone Number").optional(),
 });
 
 exports.recruiterRegisterationValidationSchema = yup.object({
@@ -696,4 +696,13 @@ exports.newsletterRecipientSchema = yup.object({
     .notRequired()
     .default([])
     .label("Specific Emails"),
+});
+
+exports.verifyGetNotificationSchema = yup.object({
+  // recipent: yup.string().email().label("Recipent").required(),
+  role: yup.string().label("Role").required(),
+});
+
+exports.validateCloseJobContent = yup.object({
+  reason: yup.string().trim().label("Reason").required(),
 });

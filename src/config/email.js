@@ -9,6 +9,7 @@ const passwordReset = require("../mail-templates/password-reset");
 const sendWaitlist = require("../mail-templates/send-waitlist");
 const contactUsTemplate = require("../mail-templates/contact_us_template");
 const newsletterTemplate = require("../mail-templates/newsletter");
+const sendDisqualificationMessage = require("../mail-templates/send-disqualification-message");
 
 module.exports = async function mail(type, config) {
   const { email } = config;
@@ -101,6 +102,16 @@ module.exports = async function mail(type, config) {
           process.env.PROJECT_NAME
         );
         mailOptions.subject = "Contact Mansior";
+      }
+    case MailTypeEnum.DISQUALIFIED_CREATOR:
+      {
+        mailOptions.html = sendDisqualificationMessage(
+          config?.subject,
+          config?.content,
+          process.env.LOGO,
+          process.env.PROJECT_NAME
+        );
+        mailOptions.subject = "Job Application Update";
       }
       break;
     default:

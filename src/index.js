@@ -1,4 +1,4 @@
-require('dotenv').config({ path: './.env.local' });
+require("dotenv").config({ path: "./.env.local" });
 const logger = require("./config/logging").getLogger("PORTGIG");
 const { auth } = require("./config/middlewares");
 const express = require("express");
@@ -89,7 +89,7 @@ io.on("connection", (socket) => {
 // In src/index.js
 app.use("/uploads", express.static(path.join(__dirname, "..", "uploads")));
 // Express middleware configuration
-app.set('trust proxy', 1);
+app.set("trust proxy", 1);
 app.use(
   cors({
     origin: "*",
@@ -148,7 +148,7 @@ app.use(
       "/api/v1/user/me",
       "/google",
       "/uploads/portfolio",
-      "/creator/upload-portfolio-files"
+      "/creator/upload-portfolio-files",
     ],
   })
 );
@@ -212,12 +212,14 @@ const recruiterRoute = require("./recruiters/recruiters-route");
 const jobRoute = require("./job/job-route");
 const waitlistRoute = require("./waitlist/waitlist-route");
 const userRoute = require("./user/user-route");
+const notificationRoute = require("./notification/notification-route");
 
 app.use("/api/v1/creator", creatorRoute);
 app.use("/api/v1/recruiter", recruiterRoute);
 app.use("/api/v1/job", jobRoute);
 app.use("/api/v1/waitlist", waitlistRoute);
 app.use("/api/v1/user", userRoute);
+app.use("/api/v1/notification", notificationRoute);
 
 async function mainApp() {
   try {
