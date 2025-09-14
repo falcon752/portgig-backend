@@ -38,6 +38,7 @@ const {
   CollectionEnum,
   RecipientTypeEnum,
   JobAvailability,
+  recruiterStatus,
 } = require("../config/constants");
 
 const {
@@ -53,7 +54,7 @@ const {
 } = require("../config/errors");
 const { CreatorModel } = require("../creators/creators-model");
 const { JobModel } = require("../job/job-model");
-const adminEmail = process.env.ADMIN_EMAIL
+const adminEmail = process.env.ADMIN_EMAIL;
 
 exports.register = async function register(payload) {
   try {
@@ -159,6 +160,16 @@ exports.login = async function login(payload, device) {
     if (!recruiter) {
       throw new InvalidPayloadError("Invalid Credentials");
     }
+
+    if (
+      recruiter.auth.email !== adminEmail &&
+      recruiter.account_status.status !== AccountStatusEnum.ACTIVE
+    ) {
+      throw new InvalidPayloadError(
+        "Your account is not active. Please contact support."
+      );
+    }
+
     if (recruiter.auth.provider == ProviderEnum.GOOGLE) {
       throw new InvalidPayloadError(
         "This account exists. Please sign in with google."
@@ -1832,8 +1843,55 @@ exports.deleteAccount = async function deleteAccount(userId, queryParams) {
 
     return {
       success: true,
-      message: `${userType.charAt(0).toUpperCase() + userType.slice(1)} account deleted successfully`,
+      message: `${
+        userType.charAt(0).toUpperCase() + userType.slice(1)
+      } account deleted successfully`,
     };
+  } catch (error) {
+    logger.error(error?.message);
+    handleError(error);
+  }
+};
+
+exports.updateRecruiterStatus = async function updateRecruiterStatus(
+  userId,
+  query
+) {
+  try {
+    const admin = await RecruiterModel.findById(userId);
+    if (!admin || admin.auth.email !== adminEmail) {
+      throw new UnAuthorizedError(ErrorMessageEnum.UNAUTHORIZED);
+    }
+    const { recruiterId, status } = query;
+    if (!status) throw new InvalidPayloadError("status is required");
+    if (
+      status != recruiterStatus.ACTIVE &&
+      status != recruiterStatus.SUSPENDED
+    ) {
+      throw new InvalidPayloadError(
+        "status must be either ACTIVE or SUSPENDED"
+      );
+    }
+    yupObjectId().required().validateSync(recruiterId);
+
+    const recruiter = await RecruiterModel.findById(recruiterId);
+    if (!recruiter) throw new InvalidPayloadError("Recruiter is not found");
+
+    if (recruiter.account_status == recruiterStatus.ACTIVE)
+      throw new InvalidPayloadError(
+        "this recruiter verification has already been resolved"
+      );
+
+    recruiter.account_status = status;
+    await recruiter.save();
+
+    await mail(MailTypeEnum.VALIDATE_RECRUITER, {
+      email: recruiter.auth.email,
+      username: `${recruiter.bio_data.full_name}`,
+      status,
+    });
+
+    return { message: "Recruiter updated succesfully", data: recruiter };
   } catch (error) {
     logger.error(error?.message);
     handleError(error);

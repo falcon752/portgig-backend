@@ -47,6 +47,12 @@ exports.JobAvailability = {
   CLOSED: "CLOSED",
 };
 
+exports.recruiterStatus = {
+  ACTIVE: "ACTIVE",
+  SUSPENDED: "SUSPENDED",
+  PENDING: "PENDING",
+};
+
 exports.ErrorMessageEnum = {
   WRONG_CREDENTIALS: "Oops! Invalid Crendentials",
   LOW_ACL: "UnAuthourized to perform this operation",
@@ -198,6 +204,7 @@ exports.MailTypeEnum = {
   SEND_TO_WAITLIST: "SEND_TO_WAITLIST",
   NEWSLETTER: "NEWSLETTER",
   DISQUALIFIED_CREATOR: "DISQUALIFIED_CREATOR",
+  VALIDATE_RECRUITER: "VALIDATE_RECRUITER",
 };
 
 exports.RecipientTypeEnum = {

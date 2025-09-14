@@ -141,6 +141,34 @@ const portfolioField = new Schema(
             link: { type: String, trim: true },
           },
         ],
+        my_services: [
+          {
+            image: {
+              type: String,
+              validate: {
+                validator: function (value) {
+                  return /\.(jpg|jpeg|png|pdf|doc|docx)$/i.test(value);
+                },
+                message:
+                  "File must be an image (jpg, jpeg, png) or document (pdf, doc, docx)",
+              },
+            },
+            name: { type: String, trim: true },
+            link: { type: String, trim: true },
+          },
+        ],
+        types_of_photography: [
+          {
+            type: String,
+            validate: {
+              validator: function (value) {
+                return /\.(jpg|jpeg|png|pdf|doc|docx)$/i.test(value);
+              },
+              message:
+                "File must be an image (jpg, jpeg, png) or document (pdf, doc, docx)",
+            },
+          },
+        ],
         jobs_open_to: [{ type: String, trim: true }],
       },
       social_media_manager: {

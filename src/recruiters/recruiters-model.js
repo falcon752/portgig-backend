@@ -1,5 +1,9 @@
 const mongoose = require("mongoose");
-const { CollectionEnum, ProviderEnum } = require("../config/constants");
+const {
+  CollectionEnum,
+  ProviderEnum,
+  recruiterStatus,
+} = require("../config/constants");
 const { profile } = require("winston");
 
 const Schema = mongoose.Schema;
@@ -85,6 +89,12 @@ const RecruiterSchema = new Schema(
       max: 5,
     },
     profile: { ...PROFILE },
+    account_status: {
+      type: String,
+      enum: Object.values(recruiterStatus),
+      uppercase: true,
+      default: recruiterStatus.PENDING,
+    },
   },
   {
     timestamps: {

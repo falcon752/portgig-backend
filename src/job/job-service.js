@@ -107,23 +107,23 @@ exports.closeJob = async function closeJob(userId, query, payload) {
       (applicant) => applicant.status === ApplicantStatus.NOT_QUALIFIED
     );
 
-    const emailsPromises = [];
+    // const emailsPromises = [];
     const notificationPromises = [];
 
     for (const applicant of disqualifiedApplicants) {
       const creator = await CreatorModel.findById(applicant.creator_id);
       if (creator && creator.auth && creator.auth.email) {
-        const emailContent = `Dear ${
-          creator.bio_data.full_name || "Creator"
-        },Thank you for applying for the ${
-          job.title
-        } position. After careful consideration, we have decided to move forward with other candidates for this role.\n Reason: ${reason}`;
+        // const emailContent = `Dear ${
+        //   creator.bio_data.full_name || "Creator"
+        // },Thank you for applying for the ${
+        //   job.title
+        // } position. After careful consideration, we have decided to move forward with other candidates for this role.\n Reason: ${reason}`;
 
-        emailsPromises.push({
-          email: creator.auth.email,
-          subject: `Update on Your Application for ${job.title}`,
-          content: emailContent,
-        });
+        // emailsPromises.push({
+        //   email: creator.auth.email,
+        //   subject: `Update on Your Application for ${job.title}`,
+        //   content: emailContent,
+        // });
 
         notificationPromises.push({
           from: CollectionEnum.RECRUITER,
@@ -132,21 +132,6 @@ exports.closeJob = async function closeJob(userId, query, payload) {
           description: `Your application for the ${job.title} position has been closed. Reason: ${reason}`,
           notification_type: NotificationTypeEnum.JOB_CLOSED,
         });
-
-        // await Promise.all([
-        //   mail(MailTypeEnum.DISQUALIFIED_CREATOR, {
-        //     email: creator.auth.email,
-        //     subject: `Update on Your Application for ${job.title}`,
-        //     content: emailContent,
-        //   }),
-        //   NotificationModel.create({
-        //     from: CollectionEnum.RECRUITER,
-        //     recipient: creator._id,
-        //     recipient_role: CollectionEnum.CREATOR,
-        //     description: `Your application for the ${job.title} position has been disqualified. Reason: ${content}`,
-        //     notification_type: NotificationTypeEnum.JOB_CLOSED,
-        //   }),
-        // ]);
       }
     }
 
@@ -159,9 +144,9 @@ exports.closeJob = async function closeJob(userId, query, payload) {
     });
 
     await Promise.all([
-      ...emailsPromises.map((email) =>
-        mail(MailTypeEnum.DISQUALIFIED_CREATOR, email)
-      ),
+      // ...emailsPromises.map((email) =>
+      //   mail(MailTypeEnum.DISQUALIFIED_CREATOR, email)
+      // ),
       NotificationModel.insertMany(notificationPromises),
     ]);
 

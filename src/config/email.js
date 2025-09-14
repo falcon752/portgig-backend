@@ -10,6 +10,7 @@ const sendWaitlist = require("../mail-templates/send-waitlist");
 const contactUsTemplate = require("../mail-templates/contact_us_template");
 const newsletterTemplate = require("../mail-templates/newsletter");
 const sendDisqualificationMessage = require("../mail-templates/send-disqualification-message");
+const accountValidatedTemplate = require("../mail-templates/recruiter-status-validate");
 
 module.exports = async function mail(type, config) {
   const { email } = config;
@@ -44,7 +45,7 @@ module.exports = async function mail(type, config) {
       );
       mailOptions.subject = config?.topic || "Mansior Newsletter";
       break;
-    
+
     case MailTypeEnum.WELCOME:
       {
         mailOptions.html = registrationMail(
@@ -92,17 +93,16 @@ module.exports = async function mail(type, config) {
         mailOptions.subject = "Action Authorization Token";
       }
       break;
-    case MailTypeEnum.SEND_EMAIL:
-      {
-        mailOptions.html = contactUsTemplate(
-          config?.userEmail,
-          config?.body,
-          config?.fullname,
-          process.env.LOGO,
-          process.env.PROJECT_NAME
-        );
-        mailOptions.subject = "Contact Mansior";
-      }
+    case MailTypeEnum.SEND_EMAIL: {
+      mailOptions.html = contactUsTemplate(
+        config?.userEmail,
+        config?.body,
+        config?.fullname,
+        process.env.LOGO,
+        process.env.PROJECT_NAME
+      );
+      mailOptions.subject = "Contact Mansior";
+    }
     case MailTypeEnum.DISQUALIFIED_CREATOR:
       {
         mailOptions.html = sendDisqualificationMessage(
@@ -112,6 +112,18 @@ module.exports = async function mail(type, config) {
           process.env.PROJECT_NAME
         );
         mailOptions.subject = "Job Application Update";
+      }
+      break;
+    case MailTypeEnum.VALIDATE_RECRUITER:
+      {
+        mailOptions.html = accountValidatedTemplate(
+          config?.email,
+          config?.username,
+          config?.status,
+          process.env.LOGO,
+          process.env.PROJECT_NAME
+        );
+        mailOptions.subject = "Portgig | Verification Complete";
       }
       break;
     default:

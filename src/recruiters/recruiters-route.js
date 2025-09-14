@@ -180,4 +180,13 @@ router.delete("/delete-account", async (req, res) => {
   }
 });
 
+router.put("/update-recruiter-status", async (req, res) => {
+  try {
+    const data = await recruiterService.updateRecruiterStatus(req.userId, req.query);
+    res.json(data);
+  } catch (error) {
+    res.status(error.status).json(error.toObject());
+  }
+});
+
 module.exports = router;

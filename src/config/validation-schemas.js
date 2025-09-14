@@ -317,6 +317,34 @@ exports.portfolioDataValidationSchema = yup.object({
             )
             .label("Latest Work")
             .optional(),
+          my_services: yup
+            .array()
+            .of(
+              yup.object({
+                image: yup
+                  .string()
+                  .matches(
+                    /\.(jpg|jpeg|png|pdf|doc|docx)$/i,
+                    "File must be an image (jpg, jpeg, png) or document (pdf, doc, docx)"
+                  ),
+                name: yup.string().trim(),
+                link: yup.string().trim(),
+              })
+            )
+            .label("My Services")
+            .optional(),
+          types_of_photography: yup
+            .array()
+            .of(
+              yup
+                .string()
+                .matches(
+                  /\.(jpg|jpeg|png|pdf|doc|docx)$/i,
+                  "File must be an image (jpg, jpeg, png) or document (pdf, doc, docx)"
+                )
+            )
+            .label("Types of Photography")
+            .optional(),
           jobs_open_to: yup
             .array()
             .of(yup.string().trim())
