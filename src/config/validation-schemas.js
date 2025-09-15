@@ -350,6 +350,16 @@ exports.portfolioDataValidationSchema = yup.object({
             .of(yup.string().trim())
             .label("Jobs Open To")
             .optional(),
+          more_work: yup
+            .array()
+            .of(
+              yup.object({
+                name: yup.string().trim(),
+                link: yup.string().trim(),
+              })
+            )
+            .label("More Work")
+            .optional(),
         });
       case TemplateType.SOCIAL_MEDIA_MANAGER:
         return yup.object({
@@ -437,6 +447,12 @@ exports.portfolioDataValidationSchema = yup.object({
             .label("Skills")
             .optional(),
           tools: yup.array().of(yup.string().trim()).label("Tools").optional(),
+          job_open_to: yup.string().trim().label("Job Open To").optional(),
+          why_you_should_work_with_me: yup
+            .string()
+            .trim()
+            .label("Why You Should WOrk With me")
+            .optional(),
         });
       default:
         return yup.object().shape({});

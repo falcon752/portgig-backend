@@ -170,6 +170,12 @@ const portfolioField = new Schema(
           },
         ],
         jobs_open_to: [{ type: String, trim: true }],
+        more_work: [
+          {
+            name: { type: String, trim: true },
+            link: { type: String, trim: true },
+          },
+        ],
       },
       social_media_manager: {
         describe_experience_years: { type: String, trim: true },
@@ -234,6 +240,8 @@ const portfolioField = new Schema(
           },
         ],
         tools: [{ type: String, trim: true }],
+        job_open_to: { type: String, trim: true },
+        why_you_should_work_with_me: { type: String, trim: true },
       },
     },
   },
