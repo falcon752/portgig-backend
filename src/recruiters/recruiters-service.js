@@ -163,7 +163,7 @@ exports.login = async function login(payload, device) {
 
     if (
       recruiter.auth.email !== adminEmail &&
-      recruiter.account_status.status !== AccountStatusEnum.ACTIVE
+      recruiter.account_status !== AccountStatusEnum.ACTIVE
     ) {
       throw new InvalidPayloadError(
         "Your account is not active. Please contact support."
