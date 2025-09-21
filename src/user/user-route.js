@@ -18,13 +18,12 @@ const redirectUrl = process.env.CLIENT_HOME_URL;
 
 const startGoogleAuth = (req, res) => {
   const role = (req.query.role || req.body?.role || "Creator");
-  const user_name = (req.query.user_name || req.body?.user_name);
   const params = new URLSearchParams({
     client_id: process.env.GOOGLE_CLIENT_ID,
     redirect_uri: process.env.GOOGLE_CALLBACK_URL,           // EXACT match in Google console
     access_type: 'offline',
     response_type: 'code',
-    state: JSON.stringify({ role,user_name }),
+    state: JSON.stringify({ role }),
     scope: (process.env.GOOGLE_OAUTH_SCOPES || [
       'https://www.googleapis.com/auth/userinfo.email',
       'https://www.googleapis.com/auth/userinfo.profile'
