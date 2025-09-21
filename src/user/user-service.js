@@ -3,12 +3,16 @@ const {
   CollectionEnum,
   AccountStatusEnum,
 } = require("../config/constants");
-const { AppError, InternalServerError, InvalidPayloadError } = require("../config/errors");
+const {
+  AppError,
+  InternalServerError,
+  InvalidPayloadError,
+} = require("../config/errors");
 const jwtTokenProvider = require("../config/jwt-token-provider");
 const { handleError } = require("../config/utils");
 const { CreatorModel } = require("../creators/creators-model");
 const { RecruiterModel } = require("../recruiters/recruiters-model");
-const axios = require("axios")
+const axios = require("axios");
 const logger = require("../config/logging").getLogger("USER:SERVICE");
 const querystring = require("querystring");
 
@@ -55,11 +59,11 @@ exports.googleLogin = async function googleLogin(req) {
     );
 
     const userInfo = token_info_response.data;
-    const { email, family_name, given_name,name } = userInfo;
+    const { email, family_name, given_name, name } = userInfo;
     console.log(userInfo, "User Info");
 
     const decodedState = JSON.parse(decodeURIComponent(state));
-    const { role } = decodedState;
+    const { role, user_name } = decodedState;
     let user;
     if (role === CollectionEnum.RECRUITER) {
       console.log("user");
@@ -79,11 +83,15 @@ exports.googleLogin = async function googleLogin(req) {
         }
       }
     } else if (role === CollectionEnum.CREATOR) {
+      if (!user_name || user_name == "") {
+        throw new InvalidPayloadError("User Name is Required.");
+      }
       user = await CreatorModel.findOne({ "auth.email": email });
       if (!user) {
         user = await CreatorModel.create({
           bio_data: {
             full_name: name || `${given_name} ${family_name}` || "no name",
+            user_name,
           },
           auth: { email: email, password: "", provider: ProviderEnum.GOOGLE },
         });

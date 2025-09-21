@@ -193,7 +193,7 @@ exports.portfolioDataValidationSchema = yup.object({
     .string()
     .matches(
       /\.(jpg|jpeg|png|pdf|doc|docx)$/i,
-      "File must be an image (jpg, jpeg, png) or document (pdf, doc, docx)"
+      "head_shot must be an image (jpg, jpeg, png) or document (pdf, doc, docx)"
     )
     .label("Head Shot")
     .optional(),
@@ -205,7 +205,7 @@ exports.portfolioDataValidationSchema = yup.object({
           .string()
           .matches(
             /\.(jpg|jpeg|png|pdf|doc|docx)$/i,
-            "File must be an image (jpg, jpeg, png) or document (pdf, doc, docx)"
+            "files image must be an image (jpg, jpeg, png) or document (pdf, doc, docx)"
           ),
         title: yup.string().trim(),
         link: yup.string().trim(),
@@ -309,7 +309,7 @@ exports.portfolioDataValidationSchema = yup.object({
                   .string()
                   .matches(
                     /\.(jpg|jpeg|png|pdf|doc|docx)$/i,
-                    "File must be an image (jpg, jpeg, png) or document (pdf, doc, docx)"
+                    "latest_work image must be an image (jpg, jpeg, png) or document (pdf, doc, docx)"
                   ),
                 title: yup.string().trim(),
                 link: yup.string().trim(),
@@ -325,7 +325,7 @@ exports.portfolioDataValidationSchema = yup.object({
                   .string()
                   .matches(
                     /\.(jpg|jpeg|png|pdf|doc|docx)$/i,
-                    "File must be an image (jpg, jpeg, png) or document (pdf, doc, docx)"
+                    "my_services File must be an image (jpg, jpeg, png) or document (pdf, doc, docx)"
                   ),
                 name: yup.string().trim(),
                 link: yup.string().trim(),
@@ -340,7 +340,7 @@ exports.portfolioDataValidationSchema = yup.object({
                 .string()
                 .matches(
                   /\.(jpg|jpeg|png|pdf|doc|docx)$/i,
-                  "File must be an image (jpg, jpeg, png) or document (pdf, doc, docx)"
+                  "types_of_photography File must be an image (jpg, jpeg, png) or document (pdf, doc, docx)"
                 )
             )
             .label("Types of Photography")
