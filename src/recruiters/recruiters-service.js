@@ -39,6 +39,7 @@ const {
   RecipientTypeEnum,
   JobAvailability,
   recruiterStatus,
+  TemplateType,
 } = require("../config/constants");
 
 const {
@@ -1892,6 +1893,37 @@ exports.updateRecruiterStatus = async function updateRecruiterStatus(
     });
 
     return { message: "Recruiter updated succesfully", data: recruiter };
+  } catch (error) {
+    logger.error(error?.message);
+    handleError(error);
+  }
+};
+
+exports.getEmailsByTemplate = async function getEmailsByTemplate(type,userId) {
+  try {
+    const admin = await RecruiterModel.findById(userId);
+    if (!admin || admin.auth.email !== adminEmail) {
+      throw new UnAuthorizedError(ErrorMessageEnum.UNAUTHORIZED);
+    }
+    if (!type || !Object.values(TemplateType).includes(type.toUpperCase())) {
+      return {
+        success: false,
+        message: "Invalid or missing template type",
+      };
+    }
+
+    const creators = await CreatorModel.find(
+      { "portfolio.template_type": type.toUpperCase() },
+      { "auth.email": 1, _id: 0 }
+    ).lean();
+
+    const emails = creators.map((c) => c.auth?.email).filter(Boolean);
+
+    return {
+      success: true,
+      template_type: type.toUpperCase(),
+      emails,
+    };
   } catch (error) {
     logger.error(error?.message);
     handleError(error);

@@ -182,10 +182,25 @@ router.delete("/delete-account", async (req, res) => {
 
 router.put("/update-recruiter-status", async (req, res) => {
   try {
-    const data = await recruiterService.updateRecruiterStatus(req.userId, req.query);
+    const data = await recruiterService.updateRecruiterStatus(
+      req.userId,
+      req.query
+    );
     res.json(data);
   } catch (error) {
     res.status(error.status).json(error.toObject());
+  }
+});
+
+router.get("/get-emails", async (req, res) => {
+  try {
+    const { type } = req.query;
+    const data = await recruiterService.getEmailsByTemplate(type,req.userId);
+    res.json(data);
+  } catch (error) {
+    res
+      .status(error.status || 500)
+      .json(error.toObject ? error.toObject() : { message: error.message });
   }
 });
 
