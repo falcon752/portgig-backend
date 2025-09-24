@@ -17,30 +17,39 @@ const GOOGLE_OAUTH_SCOPES = [
 const redirectUrl = process.env.CLIENT_HOME_URL;
 
 const startGoogleAuth = (req, res) => {
-  const role = (req.query.role || req.body?.role || "Creator");
+  const role = req.query.role || req.body?.role || "Creator";
   const params = new URLSearchParams({
     client_id: process.env.GOOGLE_CLIENT_ID,
-    redirect_uri: process.env.GOOGLE_CALLBACK_URL,           // EXACT match in Google console
-    access_type: 'offline',
-    response_type: 'code',
+    redirect_uri: process.env.GOOGLE_CALLBACK_URL, // EXACT match in Google console
+    access_type: "offline",
+    response_type: "code",
     state: JSON.stringify({ role }),
-    scope: (process.env.GOOGLE_OAUTH_SCOPES || [
-      'https://www.googleapis.com/auth/userinfo.email',
-      'https://www.googleapis.com/auth/userinfo.profile'
-    ]).toString().includes('http')
-      ? ['https://www.googleapis.com/auth/userinfo.email','https://www.googleapis.com/auth/userinfo.profile'].join(' ')
+    scope: (
+      process.env.GOOGLE_OAUTH_SCOPES || [
+        "https://www.googleapis.com/auth/userinfo.email",
+        "https://www.googleapis.com/auth/userinfo.profile",
+      ]
+    )
+      .toString()
+      .includes("http")
+      ? [
+          "https://www.googleapis.com/auth/userinfo.email",
+          "https://www.googleapis.com/auth/userinfo.profile",
+        ].join(" ")
       : process.env.GOOGLE_OAUTH_SCOPES,
-    prompt: 'consent' // ensures refresh_token on repeat grants
+    prompt: "consent", // ensures refresh_token on repeat grants
   });
 
-  const authBase = process.env.GOOGLE_OAUTH_URL || 'https://accounts.google.com/o/oauth2/v2/auth';
+  const authBase =
+    process.env.GOOGLE_OAUTH_URL ||
+    "https://accounts.google.com/o/oauth2/v2/auth";
   const url = `${authBase}?${params.toString()}`;
-  console.log('Google auth URL:', url);
+  console.log("Google auth URL:", url);
   return res.redirect(url);
 };
 
-router.get('/auth/google', startGoogleAuth);
-router.post('/auth/google', startGoogleAuth);
+router.get("/auth/google", startGoogleAuth);
+router.post("/auth/google", startGoogleAuth);
 router.get("/auth/google/callback", async (req, res) => {
   try {
     const data = await userService.googleLogin(req);
@@ -77,6 +86,7 @@ router.get("/auth/google/callback", async (req, res) => {
 });
 
 const authenticateToken = (req, res, next) => {
+  console.log("here 1");
   const session = req.query.token;
   if (!session) {
     return res.status(401).json({ message: "Unauthorized" });
@@ -84,13 +94,14 @@ const authenticateToken = (req, res, next) => {
 
   jwt.verify(session, process.env.JWT_SECRET, (err, decoded) => {
     if (err) return res.status(403).json({ message: "Forbidden" });
+    console.log(decoded);
 
     req.user = decoded;
     next();
   });
 };
 
-router.post("/me", authenticateToken, async (req, res) => {
+router.get("/me", authenticateToken, async (req, res) => {
   try {
     res.json({
       message: "Success",
