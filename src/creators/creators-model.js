@@ -35,7 +35,16 @@ const experienceField = new Schema(
     job_title: { type: String },
     location: { type: String },
     contribution: { type: String },
-    ended: { type: Date },
+    started: { type: Date },
+    ended: {
+      type: Date,
+      validate: {
+        validator: function (value) {
+          return !this.started || value > this.started;
+        },
+        message: "End date must be after start date",
+      },
+    },
   },
   { _id: false, id: false }
 );

@@ -155,7 +155,11 @@ exports.resumeDataValidationSchema = yup.object({
         job_title: yup.string().required(),
         location: yup.string().required(),
         contribution: yup.string().required(),
-        ended: yup.date().required(),
+        started: yup.date().required(),
+        ended: yup
+          .date()
+          .required()
+          .min(yup.ref("started"), "End date must be after start date"),
       })
     )
     .min(1, "Must have at least 1 experience entry")
