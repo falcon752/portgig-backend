@@ -5,14 +5,14 @@ const logger = require("../config/logging").getLogger("USER:ROUTE");
 const userService = require("./user-service");
 const jwt = require("jsonwebtoken");
 
-const GOOGLE_OAUTH_URL = process.env.GOOGLE_OAUTH_URL;
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
-const GOOGLE_CALLBACK_URL = process.env.GOOGLE_CALLBACK_URL;
+// const GOOGLE_OAUTH_URL = process.env.GOOGLE_OAUTH_URL;
+// const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+// const GOOGLE_CALLBACK_URL = process.env.GOOGLE_CALLBACK_URL;
 
-const GOOGLE_OAUTH_SCOPES = [
-  "https://www.googleapis.com/auth/userinfo.email",
-  "https://www.googleapis.com/auth/userinfo.profile",
-];
+// const GOOGLE_OAUTH_SCOPES = [
+//   "https://www.googleapis.com/auth/userinfo.email",
+//   "https://www.googleapis.com/auth/userinfo.profile",
+// ];
 
 const redirectUrl = process.env.CLIENT_HOME_URL;
 
@@ -59,7 +59,7 @@ router.get("/auth/google/callback", async (req, res) => {
       refresh_token: data.refresh_token,
       profile: data.profile,
       role: data.role,
-      //   isFirstTime: data.isFirstTime,
+      //   isFirstTime: data.isFirstTime, 
     };
 
     const sessionToken = jwt.sign(jwtPayload, process.env.JWT_SECRET, {
@@ -103,6 +103,7 @@ const authenticateToken = (req, res, next) => {
 
 router.get("/me", authenticateToken, async (req, res) => {
   try {
+    console.log("access_token: " + req.user.access_token)
     res.json({
       message: "Success",
       status: 200,
