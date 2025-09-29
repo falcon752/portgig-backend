@@ -65,6 +65,7 @@ exports.googleLogin = async function googleLogin(req) {
       console.log("user");
       user = await RecruiterModel.findOne({ "auth.email": email });
       if (!user) {
+        console.log("new recruiter")
         user = await RecruiterModel.create({
           bio_data: {
             full_name: name || `${given_name} ${family_name}` || "no name",
@@ -81,6 +82,7 @@ exports.googleLogin = async function googleLogin(req) {
     } else if (role === CollectionEnum.CREATOR) {
       user = await CreatorModel.findOne({ "auth.email": email });
       if (!user) {
+        console.log("new creator")
         const user_name = name || `${given_name} ${family_name}` || "no name" + generateRandomNumber(8)
         user = await CreatorModel.create({
           bio_data: {
