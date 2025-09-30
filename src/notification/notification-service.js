@@ -88,6 +88,7 @@ exports.getNotifications = async function getActivities(
         ],
       }
     );
+    console.log("role notifications")
 
     return {
       message: "successful",
