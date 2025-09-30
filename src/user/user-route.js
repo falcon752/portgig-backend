@@ -44,7 +44,7 @@ const startGoogleAuth = (req, res) => {
     process.env.GOOGLE_OAUTH_URL ||
     "https://accounts.google.com/o/oauth2/v2/auth";
   const url = `${authBase}?${params.toString()}`;
-  console.log("Google auth URL:", url);
+  // console.log("Google auth URL:", url);
   return res.redirect(url);
 };
 
@@ -71,8 +71,8 @@ router.get("/auth/google/callback", async (req, res) => {
     //   secure: true,
     //   maxAge: 15 * 60 * 1000,
     // });
-    console.log("reach here");
-    console.log(redirectUrl);
+    // console.log("reach here");
+    // console.log(redirectUrl);
 
     res.redirect(
       // `${process.env.CLIENT_HOME_URL}?login=success?token=${sessionToken}`
@@ -86,7 +86,7 @@ router.get("/auth/google/callback", async (req, res) => {
 });
 
 const authenticateToken = (req, res, next) => {
-  console.log("here 1");
+  // console.log("here 1");
   const session = req.query.token;
   if (!session) {
     return res.status(401).json({ message: "Unauthorized" });
@@ -103,7 +103,7 @@ const authenticateToken = (req, res, next) => {
 
 router.get("/me", authenticateToken, async (req, res) => {
   try {
-    console.log("access_token: " + req.user.access_token)
+    // console.log("access_token: " + req.user.access_token)
     res.json({
       message: "Success",
       status: 200,
