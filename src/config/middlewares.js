@@ -17,6 +17,7 @@ function auth(options) {
       next();
     } else {
       const jws = req.get("Authorization")?.split(" ")?.[1];
+      console.log(jws)
       const jwt = jws && verifyJws(jws);
 
       if (jwt) {
