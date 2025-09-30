@@ -49,6 +49,7 @@ exports.getNotifications = async function getActivities(
   try {
     const { role } = verifyGetNotificationSchema.validateSync(queryParams);
     // yupObjectId().required().validateSync(recipent);
+    console.log(role)
 
     const user =
       role === CollectionEnum.CREATOR
