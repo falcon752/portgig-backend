@@ -601,11 +601,11 @@ exports.jobCreateValidationSchema = yup.object({
     .of(yup.string().trim().label("soft"))
     .min(1, "At least one soft skill is required")
     .required("soft field is required"),
-  // responsibilities: yup
-  //   .array()
-  //   .of(yup.string().trim().label("Responsibilities"))
-  //   .min(1, "At least one responsibilities skill is required")
-  //   .required("Responsibilities field is required"),
+  responsibilities: yup
+    .array()
+    .of(yup.string().trim().label("Responsibilities"))
+    .min(1, "At least one responsibilities skill is required")
+    .required("Responsibilities field is required"),
   // requirements: yup
   //   .array()
   //   .of(yup.string().trim().label("Requirements"))

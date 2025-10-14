@@ -64,7 +64,7 @@ const JobSchema = new Schema(
     skills: {
       technical: [{ type: String, trim: true }],
       soft: [{ type: String, trim: true }],
-      // responsibilities: [{ type: String, trim: true }],
+      responsibilities: [{ type: String, trim: true }],
       // requirements: [{ type: String, trim: true }],
       // others: { type: String, trim: true },
     },
