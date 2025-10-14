@@ -46,7 +46,7 @@ exports.createJob = async function createJob(userId, payload) {
       location,
       technical,
       soft,
-      // responsibilities,
+      responsibilities,
       // requirements,
       // others,
       experience,
@@ -67,7 +67,7 @@ exports.createJob = async function createJob(userId, payload) {
       skills: {
         technical,
         soft,
-        // responsibilities,
+        responsibilities,
         // requirements,
         // others,
       },
