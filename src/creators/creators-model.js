@@ -251,6 +251,7 @@ const portfolioField = new Schema(
         tools: [{ type: String, trim: true }],
         job_open_to: { type: String, trim: true },
         why_you_should_work_with_me: { type: String, trim: true },
+        behance: { type: String, trim: true },
       },
     },
   },

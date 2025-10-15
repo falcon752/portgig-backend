@@ -455,8 +455,9 @@ exports.portfolioDataValidationSchema = yup.object({
           why_you_should_work_with_me: yup
             .string()
             .trim()
-            .label("Why You Should WOrk With me")
+            .label("Why You Should Work With me")
             .optional(),
+          behance: yup.string().trim().label("Behance").optional(),
         });
       default:
         return yup.object().shape({});
