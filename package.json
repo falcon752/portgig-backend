@@ -46,5 +46,8 @@
     "winston": "^3.17.0",
     "winston-mongodb": "^6.0.0",
     "yup": "^1.6.1"
+  },
+  "devDependencies": {
+    "dotenv-cli": "^11.0.0"
   }
 }
