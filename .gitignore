@@ -58,3 +58,4 @@ coverage/
 
 # Ignore environment-specific config
 *.local
+node_modules/
