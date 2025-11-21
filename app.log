@@ -4700,3 +4700,5 @@ InvalidPayloadError: recruiter not found
 [PORTGIG]- [32minfo[39m: 30-Oct-2025 09:10 -AM --- 🚀 APP: Started On 5007]
 [DATABASE]- [32minfo[39m: 30-Oct-2025 12:46 -PM --- 🚀 DATABASE CONNECTED: mongodb+srv://portgigcom:agWtZoEASCs2VugC@cluster0.nxdlncw.mongodb.net/portgig?retryWrites=true&w=majority]
 [PORTGIG]- [32minfo[39m: 30-Oct-2025 12:46 -PM --- 🚀 APP: Started On 5007]
+[DATABASE]- [32minfo[39m: 20-Nov-2025 08:47 -AM --- 🚀 DATABASE CONNECTED: mongodb+srv://portgigcom:agWtZoEASCs2VugC@cluster0.nxdlncw.mongodb.net/portgig?retryWrites=true&w=majority]
+[PORTGIG]- [32minfo[39m: 20-Nov-2025 08:47 -AM --- 🚀 APP: Started On 5007]
