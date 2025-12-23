@@ -126,25 +126,22 @@ router.get("/profile", async (req, res) => {
   }
 });
 
-router.post(
-  "/upload-portfolio-files",
-  upload.array("files", 20),
-  async (req, res) => {
-    const BASE_URL = process.env.BASE_URL || "https://api.portgig.com";
-    try {
-      const fileUrls = req.files.map((file) =>
-        `${BASE_URL}/uploads/portfolio/${file.filename}`.replace(/\\/g, "/")
-      );
-      res.json({
-        message: "Files uploaded successfully",
-        files: fileUrls,
-        status: 200,
-      });
-    } catch (error) {
-      res.status(400).json({ error: error.message, status: 400 });
-    }
+router.post("/upload-portfolio-files", upload.array("files", 20), async (req, res) => {
+  const BASE_URL = process.env.BASE_URL || "https://api.portgig.com";
+
+  try {
+    const fileUrls = req.files.map(file => `${BASE_URL}/uploads/portfolio/${file.filename}`.replace(/\\/g, "/"));
+
+    res.json({
+      message: "Files uploaded successfully",
+      files: fileUrls, // array of strings (URLs)
+      status: 200,
+    });
+  } catch (error) {
+    res.status(400).json({ error: error.message, status: 400 });
   }
-);
+});
+
 
 router.put("/update-profile", async (req, res) => {
   try {
