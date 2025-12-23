@@ -9,4 +9,4 @@ app.log
 .env
 .idea
 .vs
-.vscode
+.vscode.env
