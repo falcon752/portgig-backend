@@ -10,3 +10,4 @@ app.log
 .idea
 .vs
 .vscode.env
+.env.local.save
