@@ -192,17 +192,14 @@ exports.getJobs = async function getJobs(userId, queryParams) {
     }
 
     // Increment view count for each applicant when recruiter views the job
-    if (job_id) {
-      await JobModel.updateMany(
-        {
-          _id: new mongoose.Types.ObjectId(job_id),
-          recruiter_id: new mongoose.Types.ObjectId(userId),
-          "applicants.creator_id": { $exists: true },
-        },
-        {
-          $inc: { "applicants.$[].views": 1 },
-        }
-      );
+    const job = await JobModel.findById(job_id);
+    if (job) {
+      for (const applicant of job.applicants) {
+        await JobModel.updateOne(
+          { _id: job._id, "applicants.creator_id": applicant.creator_id },
+          { $inc: { "applicants.$.views": 1 } }
+        );
+      }
     }
 
     const jobs = await paginationAggregate(JobModel, queryParams, {

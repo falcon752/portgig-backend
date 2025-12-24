@@ -1,4 +1,4 @@
-require("dotenv").config({ path: "./.env.local" });
+require("dotenv").config({ path: "./.env.local.dev" });
 const logger = require("./config/logging").getLogger("PORTGIG");
 const { auth } = require("./config/middlewares");
 const express = require("express");
