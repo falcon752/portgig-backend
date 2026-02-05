@@ -4762,3 +4762,5 @@ UnAuthorizedError: Unauthorize Action
 [PORTGIG]- [31merror[39m: 04-Feb-2026 12:40 -AM --- [unhandledRejection], Shutting down server now ... ]
 [DATABASE]- [32minfo[39m: 05-Feb-2026 09:14 -PM --- 🚀 DATABASE CONNECTED: mongodb+srv://portgigcom:agWtZoEASCs2VugC@cluster0.nxdlncw.mongodb.net/portgig?retryWrites=true&w=majority]
 [PORTGIG]- [32minfo[39m: 05-Feb-2026 09:14 -PM --- 🚀 APP: Started On 5007]
+[DATABASE]- [32minfo[39m: 05-Feb-2026 10:18 -PM --- 🚀 DATABASE CONNECTED: mongodb+srv://portgigcom:agWtZoEASCs2VugC@cluster0.nxdlncw.mongodb.net/portgig?retryWrites=true&w=majority]
+[PORTGIG]- [32minfo[39m: 05-Feb-2026 10:18 -PM --- 🚀 APP: Started On 5007]
