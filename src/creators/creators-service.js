@@ -728,12 +728,13 @@ exports.updateProfileBySection = async function updateProfileBySection(
 exports.incrementProfileViews = async function (queryParams = {}) {
   try {
     const { userId, viewerId, recipientRole = "recruiter" } = queryParams;
+    
+    console.log('🔍 incrementProfileViews called with:', { userId, viewerId, recipientRole });
+    
     // Validate userId and viewerId
     yupObjectId().required().validateSync(userId);
     yupObjectId().required().validateSync(viewerId);
-    console.log(
-      `Incrementing profile views for userId: ${userId}, viewerId: ${viewerId}`
-    );
+    console.log('✅ IDs validated successfully');
 
     // Check if viewer has viewed this profile before
     const creator = await CreatorModel.findOne({
@@ -742,6 +743,8 @@ exports.incrementProfileViews = async function (queryParams = {}) {
         $elemMatch: { view_by: viewerId },
       },
     });
+
+    console.log('🔍 Existing viewer check:', creator ? 'Viewer exists (updating timestamp)' : 'New viewer (incrementing count)');
 
     let updatedCreator;
     if (creator) {
@@ -752,6 +755,7 @@ exports.incrementProfileViews = async function (queryParams = {}) {
           "profile_views.last_viewed": new Date(),
         },
       };
+      console.log('🔄 Updating existing viewer timestamp...');
       updatedCreator = await CreatorModel.findByIdAndUpdate(
         userId,
         updateQuery,
@@ -773,6 +777,7 @@ exports.incrementProfileViews = async function (queryParams = {}) {
         },
         $set: { "profile_views.last_viewed": new Date() },
       };
+      console.log('➕ Adding new viewer and incrementing count...');
       updatedCreator = await CreatorModel.findByIdAndUpdate(
         userId,
         updateQuery,
@@ -781,14 +786,21 @@ exports.incrementProfileViews = async function (queryParams = {}) {
     }
 
     if (!updatedCreator) {
+      console.error('❌ User not found:', userId);
       throw new UnAuthorizedError(ErrorMessageEnum.USER_NOT_FOUND);
     }
 
+    console.log('✅ Profile views updated successfully. New count:', updatedCreator.profile_views?.number);
+    
     return {
       message: "Profile views updated",
-      // data: getUserInfoFromDoc(updatedCreator),
+      data: {
+        viewCount: updatedCreator.profile_views?.number,
+        lastViewed: updatedCreator.profile_views?.last_viewed
+      }
     };
   } catch (error) {
+    console.error('❌ Error in incrementProfileViews:', error.message);
     logger.error(error?.message);
     handleError(error);
   }

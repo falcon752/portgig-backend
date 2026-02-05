@@ -4694,3 +4694,71 @@ InvalidPayloadError: recruiter not found
 [PORTGIG]- [32minfo[39m: 24-Oct-2025 11:04 -AM --- 🚀 APP: Started On 5007]
 [DATABASE]- [32minfo[39m: 25-Oct-2025 12:28 -PM --- 🚀 DATABASE CONNECTED: mongodb+srv://portgigcom:agWtZoEASCs2VugC@cluster0.nxdlncw.mongodb.net/portgig?retryWrites=true&w=majority]
 [PORTGIG]- [32minfo[39m: 25-Oct-2025 12:28 -PM --- 🚀 APP: Started On 5007]
+[DATABASE]- [32minfo[39m: 12-Jan-2026 10:59 -AM --- 🚀 DATABASE CONNECTED: mongodb+srv://portgigcom:agWtZoEASCs2VugC@cluster0.nxdlncw.mongodb.net/portgig?retryWrites=true&w=majority]
+[PORTGIG]- [32minfo[39m: 12-Jan-2026 10:59 -AM --- 🚀 APP: Started On 5007]
+[NOTIFICATION:SERVICE]- [31merror[39m: 12-Jan-2026 11:09 -AM --- Socket 'secureConnect' timed out after 30140ms (connectTimeoutMS: 30000)]
+[DATABASE]- [32minfo[39m: 12-Jan-2026 11:10 -AM --- 🚀 DATABASE CONNECTED: mongodb+srv://portgigcom:agWtZoEASCs2VugC@cluster0.nxdlncw.mongodb.net/portgig?retryWrites=true&w=majority]
+[PORTGIG]- [32minfo[39m: 12-Jan-2026 11:10 -AM --- 🚀 APP: Started On 5007]
+[DATABASE]- [32minfo[39m: 15-Jan-2026 09:08 -PM --- 🚀 DATABASE CONNECTED: mongodb+srv://portgigcom:agWtZoEASCs2VugC@cluster0.nxdlncw.mongodb.net/portgig?retryWrites=true&w=majority]
+[PORTGIG]- [32minfo[39m: 15-Jan-2026 09:08 -PM --- 🚀 APP: Started On 5007]
+[DATABASE]- [32minfo[39m: 24-Jan-2026 03:40 -PM --- 🚀 DATABASE CONNECTED: mongodb+srv://portgigcom:agWtZoEASCs2VugC@cluster0.nxdlncw.mongodb.net/portgig?retryWrites=true&w=majority]
+[PORTGIG]- [32minfo[39m: 24-Jan-2026 03:40 -PM --- 🚀 APP: Started On 5007]
+[DATABASE]- [32minfo[39m: 03-Feb-2026 11:41 -PM --- 🚀 DATABASE CONNECTED: mongodb+srv://portgigcom:agWtZoEASCs2VugC@cluster0.nxdlncw.mongodb.net/portgig?retryWrites=true&w=majority]
+[PORTGIG]- [32minfo[39m: 03-Feb-2026 11:41 -PM --- 🚀 APP: Started On 5007]
+[JOB:SERVICE]- [31merror[39m: 04-Feb-2026 12:07 -AM --- Error fetching jobs: recruiter not found
+InvalidPayloadError: recruiter not found
+    at Object.getJobs (/Users/mac/Documents/websites/portgig/portgig-backend/src/job/job-service.js:169:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async /Users/mac/Documents/websites/portgig/portgig-backend/src/job/job-route.js:27:18]
+[RECRUITER:SERVICE]- [31merror[39m: 04-Feb-2026 12:07 -AM --- Error fetching recruiter dashboard: Unauthorize Action
+UnAuthorizedError: Unauthorize Action
+    at Object.getRecruiterDashboard (/Users/mac/Documents/websites/portgig/portgig-backend/src/recruiters/recruiters-service.js:734:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async /Users/mac/Documents/websites/portgig/portgig-backend/src/recruiters/recruiters-route.js:128:18]
+[JOB:SERVICE]- [31merror[39m: 04-Feb-2026 12:08 -AM --- Error fetching jobs: recruiter not found
+InvalidPayloadError: recruiter not found
+    at Object.getJobs (/Users/mac/Documents/websites/portgig/portgig-backend/src/job/job-service.js:169:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async /Users/mac/Documents/websites/portgig/portgig-backend/src/job/job-route.js:27:18]
+[RECRUITER:SERVICE]- [31merror[39m: 04-Feb-2026 12:08 -AM --- Error fetching recruiter dashboard: Unauthorize Action
+UnAuthorizedError: Unauthorize Action
+    at Object.getRecruiterDashboard (/Users/mac/Documents/websites/portgig/portgig-backend/src/recruiters/recruiters-service.js:734:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async /Users/mac/Documents/websites/portgig/portgig-backend/src/recruiters/recruiters-route.js:128:18]
+[JOB:SERVICE]- [31merror[39m: 04-Feb-2026 12:08 -AM --- Error fetching jobs: recruiter not found
+InvalidPayloadError: recruiter not found
+    at Object.getJobs (/Users/mac/Documents/websites/portgig/portgig-backend/src/job/job-service.js:169:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async /Users/mac/Documents/websites/portgig/portgig-backend/src/job/job-route.js:27:18]
+[RECRUITER:SERVICE]- [31merror[39m: 04-Feb-2026 12:08 -AM --- Error fetching recruiter dashboard: Unauthorize Action
+UnAuthorizedError: Unauthorize Action
+    at Object.getRecruiterDashboard (/Users/mac/Documents/websites/portgig/portgig-backend/src/recruiters/recruiters-service.js:734:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async /Users/mac/Documents/websites/portgig/portgig-backend/src/recruiters/recruiters-route.js:128:18]
+[RECRUITER:SERVICE]- [31merror[39m: 04-Feb-2026 12:26 -AM --- Error fetching recruiter dashboard: Unauthorize Action
+UnAuthorizedError: Unauthorize Action
+    at Object.getRecruiterDashboard (/Users/mac/Documents/websites/portgig/portgig-backend/src/recruiters/recruiters-service.js:734:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async /Users/mac/Documents/websites/portgig/portgig-backend/src/recruiters/recruiters-route.js:128:18]
+[JOB:SERVICE]- [31merror[39m: 04-Feb-2026 12:26 -AM --- Error fetching jobs: recruiter not found
+InvalidPayloadError: recruiter not found
+    at Object.getJobs (/Users/mac/Documents/websites/portgig/portgig-backend/src/job/job-service.js:169:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async /Users/mac/Documents/websites/portgig/portgig-backend/src/job/job-route.js:27:18]
+[JOB:SERVICE]- [31merror[39m: 04-Feb-2026 12:26 -AM --- Error fetching jobs: recruiter not found
+InvalidPayloadError: recruiter not found
+    at Object.getJobs (/Users/mac/Documents/websites/portgig/portgig-backend/src/job/job-service.js:169:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async /Users/mac/Documents/websites/portgig/portgig-backend/src/job/job-route.js:27:18]
+[RECRUITER:SERVICE]- [31merror[39m: 04-Feb-2026 12:26 -AM --- Error fetching recruiter dashboard: Unauthorize Action
+UnAuthorizedError: Unauthorize Action
+    at Object.getRecruiterDashboard (/Users/mac/Documents/websites/portgig/portgig-backend/src/recruiters/recruiters-service.js:734:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async /Users/mac/Documents/websites/portgig/portgig-backend/src/recruiters/recruiters-route.js:128:18]
+[NOTIFICATION:SERVICE]- [31merror[39m: 04-Feb-2026 12:40 -AM --- getaddrinfo ENOTFOUND ac-ewlv2ti-shard-00-00.nxdlncw.mongodb.net]
+[NOTIFICATION:SERVICE]- [31merror[39m: 04-Feb-2026 12:40 -AM --- getaddrinfo ENOTFOUND ac-ewlv2ti-shard-00-00.nxdlncw.mongodb.net]
+[NOTIFICATION:SERVICE]- [31merror[39m: 04-Feb-2026 12:40 -AM --- getaddrinfo ENOTFOUND ac-ewlv2ti-shard-00-00.nxdlncw.mongodb.net]
+[CREATOR:SERVICE]- [31merror[39m: 04-Feb-2026 12:40 -AM --- Error in getCreatorByIdAgg: getaddrinfo ENOTFOUND ac-ewlv2ti-shard-00-00.nxdlncw.mongodb.net]
+[PORTGIG]- [31merror[39m: 04-Feb-2026 12:40 -AM --- [unhandledRejection], Shutting down server now ... ]
+[DATABASE]- [32minfo[39m: 05-Feb-2026 09:14 -PM --- 🚀 DATABASE CONNECTED: mongodb+srv://portgigcom:agWtZoEASCs2VugC@cluster0.nxdlncw.mongodb.net/portgig?retryWrites=true&w=majority]
+[PORTGIG]- [32minfo[39m: 05-Feb-2026 09:14 -PM --- 🚀 APP: Started On 5007]
