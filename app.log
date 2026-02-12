@@ -4803,3 +4803,14 @@ UnAuthorizedError: Unauthorize Action
     at Object.getRecruiterDashboard (/Users/mac/Documents/websites/portgig/portgig-backend/src/recruiters/recruiters-service.js:734:27)
     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
     at async /Users/mac/Documents/websites/portgig/portgig-backend/src/recruiters/recruiters-route.js:128:18]
+[DATABASE]- [32minfo[39m: 13-Feb-2026 12:33 -AM --- 🚀 DATABASE CONNECTED: mongodb+srv://portgigcom:agWtZoEASCs2VugC@cluster0.nxdlncw.mongodb.net/portgig?retryWrites=true&w=majority]
+[PORTGIG]- [31merror[39m: 13-Feb-2026 12:33 -AM --- [uncaughtException], Shutting down server now on uncaughtException ... ]
+[DATABASE]- [31merror[39m: 13-Feb-2026 12:47 -AM --- queryTxt ESERVFAIL cluster0.nxdlncw.mongodb.net]
+[DATABASE]- [32minfo[39m: 13-Feb-2026 12:47 -AM --- 🚀 DATABASE CONNECTED: mongodb+srv://portgigcom:agWtZoEASCs2VugC@cluster0.nxdlncw.mongodb.net/portgig?retryWrites=true&w=majority]
+[PORTGIG]- [32minfo[39m: 13-Feb-2026 12:47 -AM --- 🚀 APP: Started On 5007]
+[DATABASE]- [32minfo[39m: 13-Feb-2026 12:47 -AM --- 🚀 DATABASE CONNECTED: mongodb+srv://portgigcom:agWtZoEASCs2VugC@cluster0.nxdlncw.mongodb.net/portgig?retryWrites=true&w=majority]
+[PORTGIG]- [31merror[39m: 13-Feb-2026 12:47 -AM --- [uncaughtException], Shutting down server now on uncaughtException ... ]
+[DATABASE]- [32minfo[39m: 13-Feb-2026 12:49 -AM --- 🚀 DATABASE CONNECTED: mongodb+srv://portgigcom:agWtZoEASCs2VugC@cluster0.nxdlncw.mongodb.net/portgig?retryWrites=true&w=majority]
+[PORTGIG]- [31merror[39m: 13-Feb-2026 12:49 -AM --- [uncaughtException], Shutting down server now on uncaughtException ... ]
+[DATABASE]- [32minfo[39m: 13-Feb-2026 12:49 -AM --- 🚀 DATABASE CONNECTED: mongodb+srv://portgigcom:agWtZoEASCs2VugC@cluster0.nxdlncw.mongodb.net/portgig?retryWrites=true&w=majority]
+[PORTGIG]- [32minfo[39m: 13-Feb-2026 12:49 -AM --- 🚀 APP: Started On 5007]
