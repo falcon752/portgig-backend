@@ -4764,3 +4764,42 @@ UnAuthorizedError: Unauthorize Action
 [PORTGIG]- [32minfo[39m: 05-Feb-2026 09:14 -PM --- 🚀 APP: Started On 5007]
 [DATABASE]- [32minfo[39m: 05-Feb-2026 10:18 -PM --- 🚀 DATABASE CONNECTED: mongodb+srv://portgigcom:agWtZoEASCs2VugC@cluster0.nxdlncw.mongodb.net/portgig?retryWrites=true&w=majority]
 [PORTGIG]- [32minfo[39m: 05-Feb-2026 10:18 -PM --- 🚀 APP: Started On 5007]
+[DATABASE]- [32minfo[39m: 13-Feb-2026 12:02 -AM --- 🚀 DATABASE CONNECTED: mongodb+srv://portgigcom:agWtZoEASCs2VugC@cluster0.nxdlncw.mongodb.net/portgig?retryWrites=true&w=majority]
+[PORTGIG]- [32minfo[39m: 13-Feb-2026 12:02 -AM --- 🚀 APP: Started On 5007]
+[DATABASE]- [32minfo[39m: 13-Feb-2026 12:02 -AM --- 🚀 DATABASE CONNECTED: mongodb+srv://portgigcom:agWtZoEASCs2VugC@cluster0.nxdlncw.mongodb.net/portgig?retryWrites=true&w=majority]
+[PORTGIG]- [32minfo[39m: 13-Feb-2026 12:02 -AM --- 🚀 APP: Started On 5007]
+[CREATOR:SERVICE]- [31merror[39m: 13-Feb-2026 12:17 -AM --- Error in getCreatorByIdAgg: Unauthorize Action]
+[CREATOR:SERVICE]- [31merror[39m: 13-Feb-2026 12:18 -AM --- Error in getCreatorByIdAgg: Unauthorize Action]
+[CREATOR:SERVICE]- [31merror[39m: 13-Feb-2026 12:21 -AM --- Error in getCreatorByIdAgg: Unauthorize Action]
+[CREATOR:SERVICE]- [31merror[39m: 13-Feb-2026 12:21 -AM --- Error in getCreatorByIdAgg: Unauthorize Action]
+[CREATOR:SERVICE]- [31merror[39m: 13-Feb-2026 12:21 -AM --- Error in getCreatorByIdAgg: Unauthorize Action]
+[CREATOR:SERVICE]- [31merror[39m: 13-Feb-2026 12:21 -AM --- Error in getCreatorByIdAgg: Unauthorize Action]
+[DATABASE]- [32minfo[39m: 13-Feb-2026 12:22 -AM --- 🚀 DATABASE CONNECTED: mongodb+srv://portgigcom:agWtZoEASCs2VugC@cluster0.nxdlncw.mongodb.net/portgig?retryWrites=true&w=majority]
+[PORTGIG]- [31merror[39m: 13-Feb-2026 12:22 -AM --- [uncaughtException], Shutting down server now on uncaughtException ... ]
+[CREATOR:SERVICE]- [31merror[39m: 13-Feb-2026 12:22 -AM --- Error in getCreatorByIdAgg: Unauthorize Action]
+[CREATOR:SERVICE]- [31merror[39m: 13-Feb-2026 12:22 -AM --- Error in getCreatorByIdAgg: Unauthorize Action]
+[CREATOR:SERVICE]- [31merror[39m: 13-Feb-2026 12:23 -AM --- Error in getCreatorByIdAgg: Unauthorize Action]
+[CREATOR:SERVICE]- [31merror[39m: 13-Feb-2026 12:24 -AM --- Error in getCreatorByIdAgg: Unauthorize Action]
+[CREATOR:SERVICE]- [31merror[39m: 13-Feb-2026 12:24 -AM --- Error in getCreatorByIdAgg: Unauthorize Action]
+[DATABASE]- [32minfo[39m: 13-Feb-2026 12:26 -AM --- 🚀 DATABASE CONNECTED: mongodb+srv://portgigcom:agWtZoEASCs2VugC@cluster0.nxdlncw.mongodb.net/portgig?retryWrites=true&w=majority]
+[PORTGIG]- [32minfo[39m: 13-Feb-2026 12:26 -AM --- 🚀 APP: Started On 5007]
+[JOB:SERVICE]- [31merror[39m: 13-Feb-2026 12:27 -AM --- Error fetching jobs: recruiter not found
+InvalidPayloadError: recruiter not found
+    at Object.getJobs (/Users/mac/Documents/websites/portgig/portgig-backend/src/job/job-service.js:169:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async /Users/mac/Documents/websites/portgig/portgig-backend/src/job/job-route.js:27:18]
+[RECRUITER:SERVICE]- [31merror[39m: 13-Feb-2026 12:27 -AM --- Error fetching recruiter dashboard: Unauthorize Action
+UnAuthorizedError: Unauthorize Action
+    at Object.getRecruiterDashboard (/Users/mac/Documents/websites/portgig/portgig-backend/src/recruiters/recruiters-service.js:734:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async /Users/mac/Documents/websites/portgig/portgig-backend/src/recruiters/recruiters-route.js:128:18]
+[JOB:SERVICE]- [31merror[39m: 13-Feb-2026 12:27 -AM --- Error fetching jobs: recruiter not found
+InvalidPayloadError: recruiter not found
+    at Object.getJobs (/Users/mac/Documents/websites/portgig/portgig-backend/src/job/job-service.js:169:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async /Users/mac/Documents/websites/portgig/portgig-backend/src/job/job-route.js:27:18]
+[RECRUITER:SERVICE]- [31merror[39m: 13-Feb-2026 12:27 -AM --- Error fetching recruiter dashboard: Unauthorize Action
+UnAuthorizedError: Unauthorize Action
+    at Object.getRecruiterDashboard (/Users/mac/Documents/websites/portgig/portgig-backend/src/recruiters/recruiters-service.js:734:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async /Users/mac/Documents/websites/portgig/portgig-backend/src/recruiters/recruiters-route.js:128:18]

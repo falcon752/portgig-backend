@@ -1072,6 +1072,256 @@ function toObjectId(id) {
 }
 
 /**
+ * Get a single creator by username with enriched ratings and view history.
+ * @param {string} username - username of the creator to fetch
+ */
+exports.getCreatorByUsernameAgg = async function getCreatorByUsernameAgg(username) {
+  try {
+    // Validate username
+    if (!username) {
+      throw new InvalidPayloadError("Username is required");
+    }
+
+    // Check if creator exists (case-insensitive search)
+    // Escape special regex characters to prevent injection
+    const escapedUsername = username.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const creator = await CreatorModel.findOne({ 
+      "bio_data.user_name": { $regex: new RegExp(`^${escapedUsername}$`, 'i') }
+    })
+      .select("_id")
+      .lean();
+    if (!creator) {
+      throw new InvalidPayloadError(`Creator with username '${username}' not found`);
+    }
+
+    const _creatorId = toObjectId(creator._id);
+
+    const pipeline = [
+      { $match: { _id: _creatorId } },
+      // Prep arrays for lookups
+      {
+        $addFields: {
+          rating_user_ids: {
+            $filter: {
+              input: "$ratings.user",
+              as: "ru",
+              cond: { $ne: ["$$ru", null] },
+            },
+          },
+          viewer_creator_ids: {
+            $map: {
+              input: { $ifNull: ["$profile_views.view_history", []] },
+              as: "vh",
+              in: {
+                $cond: [
+                  { $eq: ["$$vh.recipient_role", "creators"] },
+                  "$$vh.view_by",
+                  null,
+                ],
+              },
+            },
+          },
+          viewer_recruiter_ids: {
+            $map: {
+              input: { $ifNull: ["$profile_views.view_history", []] },
+              as: "vh",
+              in: {
+                $cond: [
+                  { $eq: ["$$vh.recipient_role", "recruiters"] },
+                  "$$vh.view_by",
+                  null,
+                ],
+              },
+            },
+          },
+        },
+      },
+      // Strip nulls from viewer arrays
+      {
+        $addFields: {
+          viewer_creator_ids: {
+            $filter: {
+              input: "$viewer_creator_ids",
+              as: "id",
+              cond: { $ne: ["$$id", null] },
+            },
+          },
+          viewer_recruiter_ids: {
+            $filter: {
+              input: "$viewer_recruiter_ids",
+              as: "id",
+              cond: { $ne: ["$$id", null] },
+            },
+          },
+        },
+      },
+      // Rater names (ratings.user -> recruiters collection)
+      {
+        $lookup: {
+          from: "recruiters",
+          localField: "rating_user_ids",
+          foreignField: "_id",
+          as: "rating_recruiters",
+        },
+      },
+      // Profile viewers from recruiters
+      {
+        $lookup: {
+          from: "recruiters",
+          localField: "viewer_recruiter_ids",
+          foreignField: "_id",
+          as: "view_recruiters",
+        },
+      },
+      // Profile viewers from creators
+      {
+        $lookup: {
+          from: "creators",
+          localField: "viewer_creator_ids",
+          foreignField: "_id",
+          as: "view_creators",
+        },
+      },
+      // Final shape
+      {
+        $project: {
+          bio_data: 1,
+          bio: 1,
+          profile: 1,
+          resume: 1,
+          portfolio: 1,
+          rating: 1,
+          social_clicks: 1,
+          created_at: 1,
+          updated_at: 1,
+          ratings: {
+            $map: {
+              input: { $ifNull: ["$ratings", []] },
+              as: "r",
+              in: {
+                value: "$$r.value",
+                comment: "$$r.comment",
+                created_at: "$$r.created_at",
+                user: {
+                  $let: {
+                    vars: {
+                      matched: {
+                        $arrayElemAt: [
+                          "$rating_recruiters",
+                          {
+                            $indexOfArray: [
+                              "$rating_recruiters._id",
+                              "$$r.user",
+                            ],
+                          },
+                        ],
+                      },
+                    },
+                    in: {
+                      user_id: { $ifNull: ["$$matched._id", null] },
+                      username: {
+                        $ifNull: ["$$matched.bio_data.full_name", "Unknown"],
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          profile_views: {
+            number: { $ifNull: ["$profile_views.number", 0] },
+            last_viewed: { $ifNull: ["$profile_views.last_viewed", null] },
+            view_history: {
+              $map: {
+                input: { $ifNull: ["$profile_views.view_history", []] },
+                as: "vh",
+                in: {
+                  viewed_at: "$$vh.viewed_at",
+                  recipient_role: "$$vh.recipient_role",
+                  viewer: {
+                    $cond: [
+                      { $eq: ["$$vh.recipient_role", "recruiters"] },
+                      {
+                        $let: {
+                          vars: {
+                            matched: {
+                              $arrayElemAt: [
+                                "$view_recruiters",
+                                {
+                                  $indexOfArray: [
+                                    "$view_recruiters._id",
+                                    "$$vh.view_by",
+                                  ],
+                                },
+                              ],
+                            },
+                          },
+                          in: {
+                            viewer_id: { $ifNull: ["$$matched._id", null] },
+                            viewer_name: {
+                              $ifNull: [
+                                "$$matched.bio_data.full_name",
+                                "Unknown",
+                              ],
+                            },
+                          },
+                        },
+                      },
+                      {
+                        $let: {
+                          vars: {
+                            matched: {
+                              $arrayElemAt: [
+                                "$view_creators",
+                                {
+                                  $indexOfArray: [
+                                    "$view_creators._id",
+                                    "$$vh.view_by",
+                                  ],
+                                },
+                              ],
+                            },
+                          },
+                          in: {
+                            viewer_id: { $ifNull: ["$$matched._id", null] },
+                            viewer_name: {
+                              $ifNull: [
+                                "$$matched.bio_data.full_name",
+                                {
+                                  $ifNull: [
+                                    "$$matched.bio_data.user_name",
+                                    "Unknown",
+                                  ],
+                                },
+                              ],
+                            },
+                          },
+                        },
+                      },
+                    ],
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      { $limit: 1 },
+    ];
+
+    const result = await CreatorModel.aggregate(pipeline).exec();
+    if (!result.length) {
+      throw new UnAuthorizedError(ErrorMessageEnum.USER_NOT_FOUND);
+    }
+
+    return { message: "success", data: result[0] };
+  } catch (error) {
+    logger.error(`Error in getCreatorByUsernameAgg: ${error.message}`, { error });
+    throw error;
+  }
+};
+
+/**
  * Get a single creator with enriched ratings and view history.
  * @param {string} requesterId - id of the user making the call (for auth check)
  * @param {string} creatorId - id of the creator to fetch
