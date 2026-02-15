@@ -119,7 +119,19 @@ router.get("/refresh-access-token", loginLimiter, async (req, res) => {
 router.get("/profile", async (req, res) => {
   try {
     const creatorId = req.query.creatorId;
-    const data = await creatorService.getCreatorByIdAgg(creatorId);
+    const username = req.query.username;
+    
+    let data;
+    if (username) {
+      // Public access by username
+      data = await creatorService.getCreatorByUsernameAgg(username);
+    } else if (creatorId) {
+      // Legacy access by creator ID
+      data = await creatorService.getCreatorByIdAgg(creatorId);
+    } else {
+      throw new Error("Either creatorId or username must be provided");
+    }
+    
     res.json(data);
   } catch (error) {
     res.status(error.status).json(error.toObject());
