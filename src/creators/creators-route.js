@@ -5,22 +5,12 @@ const logger = require("../config/logging").getLogger("CREATOR:ROUTE");
 const creatorService = require("./creators-service");
 
 const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
+const cloudinary = require("cloudinary").v2;
 
-const uploadDir = path.join(__dirname, "..", "..", "uploads", "portfolio");
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-// Multer storage configuration
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, "..", "..", "uploads", "portfolio"));
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${req.userId}-${Date.now()}${path.extname(file.originalname)}`);
-  },
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 const fileFilter = (req, file, cb) => {
@@ -37,11 +27,11 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-// Multer instance for handling multiple file uploads
+// Use memory storage — files are uploaded to Cloudinary, not saved to disk
 const upload = multer({
-  storage,
+  storage: multer.memoryStorage(),
   fileFilter,
-  limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5MB
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
 });
 
 router.post("/register", async (req, res) => {
@@ -139,14 +129,28 @@ router.get("/profile", async (req, res) => {
 });
 
 router.post("/upload-portfolio-files", upload.array("files", 20), async (req, res) => {
-  const BASE_URL = process.env.BASE_URL || "https://api.portgig.com";
-
   try {
-    const fileUrls = req.files.map(file => `${BASE_URL}/uploads/portfolio/${file.filename}`.replace(/\\/g, "/"));
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ error: "No files provided", status: 400 });
+    }
+
+    const uploadToCloudinary = (buffer) =>
+      new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "portfolio", resource_type: "auto" },
+          (error, result) => {
+            if (error || !result) return reject(error ?? new Error("Upload failed"));
+            resolve(result.secure_url);
+          }
+        );
+        stream.end(buffer);
+      });
+
+    const fileUrls = await Promise.all(req.files.map((f) => uploadToCloudinary(f.buffer)));
 
     res.json({
       message: "Files uploaded successfully",
-      files: fileUrls, // array of strings (URLs)
+      files: fileUrls,
       status: 200,
     });
   } catch (error) {

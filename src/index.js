@@ -10,7 +10,6 @@ const PORT = process.env.PORT || 5007;
 const path = require("path");
 const http = require("http");
 const { Server } = require("socket.io");
-const fs = require("fs");
 const multer = require("multer");
 
 // Initialize Express and HTTP server
@@ -138,20 +137,16 @@ app.use(auth({
 }));
 
 // ===== FILE UPLOAD SETUP =====
-const uploadDir = path.join(__dirname, "../uploads/portfolio");
-fs.mkdirSync(uploadDir, { recursive: true });
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, uploadDir),
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + "-" + file.originalname);
-  }
+const { v2: cloudinary } = require("cloudinary");
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 const upload = multer({
-  storage,
-  limits: { fileSize: 50 * 1024 * 1024 } // 50 MB
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 50 * 1024 * 1024 }, // 50 MB
 });
 
 // ===== ROUTES =====
@@ -188,16 +183,24 @@ app.get("/api/v1/fields", (req, res) => {
 });
 
 // ===== PORTFOLIO UPLOAD ENDPOINT =====
-app.post("/api/v1/creator/upload-portfolio-files", upload.array("files", 20), (req, res) => {
-  const BASE_URL = process.env.BASE_URL || `http://localhost:${PORT}`;
+app.post("/api/v1/creator/upload-portfolio-files", upload.array("files", 20), async (req, res) => {
   try {
-    if (!req.files || req.files.length === 0) 
+    if (!req.files || req.files.length === 0)
       return res.status(400).json({ error: "No files uploaded" });
 
-    const fileUrls = req.files.map(f => 
-      `${BASE_URL}/uploads/portfolio/${f.filename}`.replace(/\\/g, "/")
-    );
+    const uploadToCloudinary = (buffer) =>
+      new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "portfolio", resource_type: "auto" },
+          (error, result) => {
+            if (error || !result) return reject(error ?? new Error("Upload failed"));
+            resolve(result.secure_url);
+          }
+        );
+        stream.end(buffer);
+      });
 
+    const fileUrls = await Promise.all(req.files.map((f) => uploadToCloudinary(f.buffer)));
     res.status(200).json({ message: "Files uploaded successfully", files: fileUrls });
   } catch (err) {
     console.error("Upload error:", err);
