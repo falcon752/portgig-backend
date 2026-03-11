@@ -52,7 +52,7 @@ exports.authDataValidationSchema = yup.object({
   phone_number: yup
     .string()
     .label("Phone Number")
-    .length(11, "081,080,071,091,070,090...etc format only")
+    .length(11, "Phone number must be exactly 11 digits (e.g. 08012345678)")
     .transform((value, originalValue) => {
       // Use trim() to remove leading and trailing whitespaces, then replace all remaining whitespaces
       return typeof originalValue === "string"
@@ -86,7 +86,7 @@ exports.profileDataValidationSchema = yup.object({
   phone_number: yup
     .string()
     .label("Phone Number")
-    .length(11, "081,080,071,091,070,090...etc format only")
+    .length(11, "Phone number must be exactly 11 digits (e.g. 08012345678)")
     .transform((value, originalValue) => {
       // Use trim() to remove leading and trailing whitespaces, then replace all remaining whitespaces
       return typeof originalValue === "string"
