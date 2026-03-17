@@ -5,12 +5,18 @@ const logger = require("../config/logging").getLogger("CREATOR:ROUTE");
 const creatorService = require("./creators-service");
 
 const multer = require("multer");
-const cloudinary = require("cloudinary").v2;
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+const crypto = require("crypto");
+const path = require("path");
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+const s3 = new S3Client({
+  endpoint: process.env.SPACES_ENDPOINT,
+  region: process.env.SPACES_REGION || "us-east-1",
+  credentials: {
+    accessKeyId: process.env.SPACES_KEY,
+    secretAccessKey: process.env.SPACES_SECRET,
+  },
+  forcePathStyle: false,
 });
 
 const fileFilter = (req, file, cb) => {
@@ -134,19 +140,20 @@ router.post("/upload-portfolio-files", upload.array("files", 20), async (req, re
       return res.status(400).json({ error: "No files provided", status: 400 });
     }
 
-    const uploadToCloudinary = (buffer) =>
-      new Promise((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream(
-          { folder: "portfolio", resource_type: "auto" },
-          (error, result) => {
-            if (error || !result) return reject(error ?? new Error("Upload failed"));
-            resolve(result.secure_url);
-          }
-        );
-        stream.end(buffer);
-      });
+    const uploadToSpaces = async (file) => {
+      const ext = path.extname(file.originalname);
+      const filename = `portfolio/${crypto.randomUUID()}${ext}`;
+      await s3.send(new PutObjectCommand({
+        Bucket: process.env.SPACES_BUCKET,
+        Key: filename,
+        Body: file.buffer,
+        ContentType: file.mimetype,
+        ACL: "public-read",
+      }));
+      return `${process.env.SPACES_CDN_URL || process.env.SPACES_ENDPOINT.replace("https://", `https://${process.env.SPACES_BUCKET}.`)}/${filename}`;
+    };
 
-    const fileUrls = await Promise.all(req.files.map((f) => uploadToCloudinary(f.buffer)));
+    const fileUrls = await Promise.all(req.files.map((f) => uploadToSpaces(f)));
 
     res.json({
       message: "Files uploaded successfully",
