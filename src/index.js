@@ -188,24 +188,6 @@ app.get("/api/v1/fields", (req, res) => {
 });
 
 // ===== PORTFOLIO UPLOAD ENDPOINT =====
-app.post("/api/v1/creator/upload-portfolio-files", upload.array("files", 20), (req, res) => {
-  const BASE_URL = process.env.BASE_URL || `http://localhost:${PORT}`;
-  try {
-    if (!req.files || req.files.length === 0) 
-      return res.status(400).json({ error: "No files uploaded" });
-
-    const fileUrls = req.files.map(f => 
-      `${BASE_URL}/uploads/portfolio/${f.filename}`.replace(/\\/g, "/")
-    );
-
-    res.status(200).json({ message: "Files uploaded successfully", files: fileUrls });
-  } catch (err) {
-    console.error("Upload error:", err);
-    res.status(500).json({ error: "Failed to upload files" });
-  }
-});
-
-
 // ===== IMPORT ROUTES =====
 const creatorRoute = require("./creators/creators-route");
 const recruiterRoute = require("./recruiters/recruiters-route");
