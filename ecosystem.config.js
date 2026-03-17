@@ -1,11 +1,9 @@
 module.exports = {
   apps: [{
-    name: "portgig",
-    cwd: "/root/portgig",
+    name: "portgig-backend",
+    cwd: "/home/Portgig/apps/portgig-backend",
     script: "node",
-    // important: provide the dotenv path *after* the script
-    // add debug if you want to see dotenv messages on boot
-    args: "-r dotenv/config ./src/index.js dotenv_config_path=/root/portgig/.env.local dotenv_config_debug=true",
+    args: "-r dotenv/config ./src/index.js dotenv_config_path=/home/Portgig/apps/portgig-backend/.env.local dotenv_config_debug=true",
     env: {
       NODE_ENV: "production",
       HOST: "127.0.0.1",
@@ -14,5 +12,17 @@ module.exports = {
     watch: false,
     autorestart: true,
     max_memory_restart: "400M"
+  }, {
+    name: "portgig-frontend",
+    cwd: "/home/Portgig/apps/portgig-frontend",
+    script: "node_modules/.bin/next",
+    args: "start -p 3002",
+    env: {
+      NODE_ENV: "production",
+      PORT: "3002"
+    },
+    watch: false,
+    autorestart: true,
+    max_memory_restart: "600M"
   }]
 };
