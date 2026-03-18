@@ -15,7 +15,7 @@ const accountValidatedTemplate = require("../mail-templates/recruiter-status-val
 module.exports = async function mail(type, config) {
   const { email } = config;
   const mailOptions = {
-    from: process.env.MAIL_FROM || "",
+    from: `"${process.env.PROJECT_NAME || "Portgig"}" <${process.env.MAIL_FROM || ""}>`,
     to: email,
   };
   switch (type) {
@@ -43,7 +43,7 @@ module.exports = async function mail(type, config) {
         process.env.LOGO,
         process.env.PROJECT_NAME
       );
-      mailOptions.subject = config?.topic || "Mansior Newsletter";
+      mailOptions.subject = config?.topic || `${process.env.PROJECT_NAME || "Portgig"} Newsletter`;
       break;
 
     case MailTypeEnum.WELCOME:
@@ -55,7 +55,7 @@ module.exports = async function mail(type, config) {
           process.env.LOGO,
           process.env.PROJECT_NAME
         );
-        mailOptions.subject = config.subject;
+        mailOptions.subject = config.subject || `Welcome to ${process.env.PROJECT_NAME || "Portgig"} — Verify your account`;
       }
       break;
     case MailTypeEnum.PASSWORD_RESET:
@@ -67,7 +67,7 @@ module.exports = async function mail(type, config) {
           process.env.PROJECT_NAME,
           process.env.SUPPORT_MAIL
         );
-        mailOptions.subject = "Password Reset O.T.P";
+        mailOptions.subject = `${process.env.PROJECT_NAME || "Portgig"} — Your password reset code`;
       }
       break;
     case MailTypeEnum.EMAIL_VERIFICATION:
@@ -101,7 +101,8 @@ module.exports = async function mail(type, config) {
         process.env.LOGO,
         process.env.PROJECT_NAME
       );
-      mailOptions.subject = "Contact Mansior";
+      mailOptions.subject = `Contact ${process.env.PROJECT_NAME || "Portgig"}`;
+      break;
     }
     case MailTypeEnum.DISQUALIFIED_CREATOR:
       {
