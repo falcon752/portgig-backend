@@ -416,7 +416,11 @@ exports.resetPassword = async function resetPassword(payload) {
     creator.auth.token = null;
     creator.auth.password = bcryptjs.hashSync(password);
     await creator.save();
-    // @TODO send mail to the creator
+    await mail(MailTypeEnum.SEND_TO_WAITLIST, {
+      email: creator.auth.email,
+      subject: "Password Reset Successful",
+      content: `Hi ${creator?.bio_data?.user_name || "there"},<br><br>Your password has been reset successfully. If you did not make this change, please contact support immediately at ${process.env.SUPPORT_MAIL}.`,
+    });
     return {
       message: "Password Reset Successfully",
       status: 200,
