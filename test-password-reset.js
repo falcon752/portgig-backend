@@ -1,21 +1,23 @@
 /**
  * Password Reset Flow Test Script
- * Tests both Creator and Recruiter flows against the production API.
  *
  * Usage:
+ *   # Against production:
  *   node test-password-reset.js
  *
- * For the full end-to-end OTP test, set these env vars:
- *   CREATOR_TEST_EMAIL=<email of an existing creator account>
- *   RECRUITER_TEST_EMAIL=<email of an existing recruiter account>
+ *   # Against local backend (port 5007):
+ *   LOCAL=1 node test-password-reset.js
  *
- * The OTP step is interactive: the script pauses and asks you to enter the OTP
- * sent to the email so you can complete the full flow.
+ *   # Full end-to-end (sends real OTP to email):
+ *   LOCAL=1 CREATOR_TEST_EMAIL=you@example.com node test-password-reset.js
+ *   CREATOR_TEST_EMAIL=you@example.com node test-password-reset.js
  */
 
 const readline = require("readline");
 
-const BASE = "https://api.portgig.com/api/v1";
+const BASE = process.env.LOCAL === "1"
+  ? "http://localhost:5007/api/v1"
+  : "https://api.portgig.com/api/v1";
 
 // ─── Colours ──────────────────────────────────────────────────────────────────
 const c = {
