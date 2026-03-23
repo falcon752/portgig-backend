@@ -192,14 +192,12 @@ exports.getJobs = async function getJobs(userId, queryParams) {
     }
 
     // Increment view count for each applicant when recruiter views the job
-    const job = await JobModel.findById(job_id);
-    if (job) {
-      for (const applicant of job.applicants) {
-        await JobModel.updateOne(
-          { _id: job._id, "applicants.creator_id": applicant.creator_id },
-          { $inc: { "applicants.$.views": 1 } }
-        );
-      }
+    const jobToTrack = await JobModel.findOne(matchStage);
+    if (jobToTrack) {
+      await JobModel.updateMany(
+        { _id: jobToTrack._id },
+        { $inc: { "applicants.$[].views": 1 } }
+      );
     }
 
     const jobs = await paginationAggregate(JobModel, queryParams, {
