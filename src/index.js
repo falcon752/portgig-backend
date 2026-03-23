@@ -10,8 +10,6 @@ const PORT = process.env.PORT || 5007;
 const path = require("path");
 const http = require("http");
 const { Server } = require("socket.io");
-const fs = require("fs");
-const multer = require("multer");
 
 // Initialize Express and HTTP server
 const app = express();
@@ -90,12 +88,11 @@ app.use(cors({
   ],
   credentials: true
 }));
-app.use(express.json({ limit: "100mb" }));
-app.use(express.urlencoded({ extended: true, limit: "100mb" }));
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(hpp());
 app.use(useragent.express());
 app.use(express.static(path.join(__dirname, "../client")));
-app.use("/uploads", express.static(path.join(__dirname, "..", "uploads")));
 
 // ===== AUTH MIDDLEWARE =====
 app.use(auth({
@@ -132,27 +129,10 @@ app.use(auth({
     "/google",
     // "/uploads/portfolio",
     // "/creator/upload-portfolio-files",
-    "/api/v1/uploads/portfolio",
+    // "/api/v1/uploads/portfolio",  -- removed, no longer exists
     "/api/v1/creator/upload-portfolio-files"
   ]
 }));
-
-// ===== FILE UPLOAD SETUP =====
-const uploadDir = path.join(__dirname, "../uploads/portfolio");
-fs.mkdirSync(uploadDir, { recursive: true });
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, uploadDir),
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + "-" + file.originalname);
-  }
-});
-
-const upload = multer({
-  storage,
-  limits: { fileSize: 10 * 1024 * 1024 } // 10 MB
-});
 
 // ===== ROUTES =====
 app.get("/", (req, res) => res.sendFile(path.join(__dirname, "../client", "index.html")));
