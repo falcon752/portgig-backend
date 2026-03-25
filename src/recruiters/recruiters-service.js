@@ -355,11 +355,11 @@ exports.requestPasswordReset = async function requestPasswordReset(payload) {
         recruiter.auth.token = token;
         await recruiter.save();
 
-        // await mail(MailTypeEnum.PASSWORD_RESET, {
-        //   name: `${recruiter?.bio_data?.user_name}`,
-        //   otp: token?.value,
-        //   email: recruiter?.auth?.email,
-        // });
+        await mail(MailTypeEnum.PASSWORD_RESET, {
+          name: `${recruiter?.bio_data?.user_name}`,
+          otp: token?.value,
+          email: recruiter?.auth?.email,
+        });
         return { message: "O.T.P Sent to " + payload?.email, status: 200 };
       }
 

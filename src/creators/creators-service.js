@@ -337,11 +337,11 @@ exports.requestPasswordReset = async function requestPasswordReset(payload) {
         creator.auth.token = token;
         await creator.save();
 
-        // await mail(MailTypeEnum.PASSWORD_RESET, {
-        //   name: `${creator?.bio_data?.user_name}`,
-        //   otp: token?.value,
-        //   email: creator?.auth?.email,
-        // });
+        await mail(MailTypeEnum.PASSWORD_RESET, {
+          name: `${creator?.bio_data?.user_name}`,
+          otp: token?.value,
+          email: creator?.auth?.email,
+        });
         return { message: "O.T.P Sent to " + payload?.email, status: 200 };
       }
 
