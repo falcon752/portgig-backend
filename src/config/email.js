@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const dns = require("dns").promises;
 const { nanoid } = require("nanoid");
 const { MailTypeEnum } = require("../config/constants");
 
@@ -131,8 +132,15 @@ module.exports = async function mail(type, config) {
       throw new InvalidPayloadError("Mail Type Not known");
   }
 
+  // Resolve IPv6 address to avoid VPS IPv4 being blocked by Gmail/Zoho
+  let smtpHost = process.env.MAIL_HOST;
+  try {
+    const ipv6records = await dns.resolve6(smtpHost);
+    if (ipv6records.length > 0) smtpHost = ipv6records[0];
+  } catch (_) { /* fallback to hostname if no AAAA record */ }
+
   const transporter = nodemailer.createTransport({
-    host: process.env.MAIL_HOST,
+    host: smtpHost,
     port: parseInt(process.env.MAIL_PORT || "587", 10),
     maxConnections: 100,
     maxMessages: "infinity",
@@ -144,7 +152,7 @@ module.exports = async function mail(type, config) {
       user: process.env.MAIL_USERNAME,
       pass: process.env.MAIL_PASSWORD,
     },
-    tls: { rejectUnauthorized: false },
+    tls: { rejectUnauthorized: false, servername: process.env.MAIL_HOST },
   });
 
   try {
