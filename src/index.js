@@ -1,4 +1,7 @@
 require("dotenv").config({ path: "./.env.local.dev" });
+// Prefer IPv6 so outbound SMTP connects via IPv6 (Gmail blocks this VPS's IPv4)
+const dns = require("dns");
+dns.setDefaultResultOrder("ipv6first");
 const logger = require("./config/logging").getLogger("PORTGIG");
 const { auth } = require("./config/middlewares");
 const express = require("express");
