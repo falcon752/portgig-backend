@@ -8,6 +8,39 @@ const express = require("express");
 const cors = require("cors");
 const database = require("./config/database");
 const hpp = require("hpp");
+
+// ── Inline security middleware (no extra packages required) ──────────────────
+// Strips MongoDB operator injection ($where, $gt, etc.) from req.body/query/params
+function mongoSanitize(obj) {
+  if (!obj || typeof obj !== "object") return;
+  for (const key of Object.keys(obj)) {
+    if (key.startsWith("$") || key.includes(".")) {
+      delete obj[key];
+    } else if (typeof obj[key] === "object") {
+      mongoSanitize(obj[key]);
+    }
+  }
+}
+function noSqlInjection(req, _res, next) {
+  mongoSanitize(req.body);
+  mongoSanitize(req.query);
+  mongoSanitize(req.params);
+  next();
+}
+
+// HTTP security headers for every API response
+function securityHeaders(_req, res, next) {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+  res.setHeader("X-Permitted-Cross-Domain-Policies", "none");
+  res.setHeader("Permissions-Policy", "geolocation=(), camera=(), microphone=()");
+  // Remove Express fingerprint
+  res.removeHeader("X-Powered-By");
+  next();
+}
+// ─────────────────────────────────────────────────────────────────────────────
 const useragent = require("express-useragent");
 const PORT = process.env.PORT || 5007;
 const path = require("path");
@@ -77,6 +110,7 @@ io.on("connection", (socket) => {
 
 // ===== MIDDLEWARE =====
 app.set("trust proxy", 1);
+app.use(securityHeaders);
 app.use(cors({
   origin: ["https://portgig.com", "https://www.portgig.com", "http://localhost:3000"],
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
@@ -94,6 +128,7 @@ app.use(cors({
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(hpp());
+app.use(noSqlInjection);
 app.use(useragent.express());
 app.use(express.static(path.join(__dirname, "../client")));
 
