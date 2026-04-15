@@ -196,8 +196,8 @@ exports.portfolioDataValidationSchema = yup.object({
   head_shot: yup
     .string()
     .matches(
-      /\.(jpg|jpeg|png|pdf|doc|docx)$/i,
-      "head_shot must be an image (jpg, jpeg, png) or document (pdf, doc, docx)"
+      /\.(jpg|jpeg|png|gif|webp|pdf|doc|docx)$/i,
+      "head_shot must be an image (jpg, jpeg, png, gif, webp) or document (pdf, doc, docx)"
     )
     .label("Head Shot")
     .optional(),
@@ -208,8 +208,8 @@ exports.portfolioDataValidationSchema = yup.object({
         image: yup
           .string()
           .matches(
-            /\.(jpg|jpeg|png|pdf|doc|docx)$/i,
-            "files image must be an image (jpg, jpeg, png) or document (pdf, doc, docx)"
+            /\.(jpg|jpeg|png|gif|webp|pdf|doc|docx)$/i,
+            "files image must be an image (jpg, jpeg, png, gif, webp) or document (pdf, doc, docx)"
           ),
         title: yup.string().trim(),
         link: yup.string().trim(),
